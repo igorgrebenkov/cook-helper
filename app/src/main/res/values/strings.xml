@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CookHelper</string>
+    <string name="searchBtnTxt">Search Recipe</string>
+    <string name="browseAddBtnTxt">Browse/Add Recipe</string>
+</resources>
