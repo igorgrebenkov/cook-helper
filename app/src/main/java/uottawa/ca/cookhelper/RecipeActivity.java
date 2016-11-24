@@ -31,6 +31,8 @@ public class RecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
+        // Get the position of the currently viewed recipe in the recipeList
+        // and get the recipe list
         Bundle bundle = getIntent().getExtras();
         for (String key : bundle.keySet()) {
             if (key.equals("position")) {
@@ -39,16 +41,25 @@ public class RecipeActivity extends AppCompatActivity {
                 recipes = (ArrayList<Recipe>) bundle.getSerializable(key);
             }
         }
-
         recipe = recipes.get(recipePosition);
 
         updateTextViews();
     }
 
+    /**
+     * Action associated with the edit button.
+     * Makes the text fields editable.
+     * @param view the view
+     */
     protected void editButtonAction(View view) {
         nameView.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
     }
 
+    /**
+     * Action associated with the OK button.
+     * Update the Recipe's model with the user's edits and hides the keyboard.
+     * @param view the view
+     */
     protected void okButtonAction(View view) {
         // Hide keyboard
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -59,6 +70,9 @@ public class RecipeActivity extends AppCompatActivity {
         updateTextViews();
     }
 
+    /**
+     * Updates the text views with the Recipe model.
+     */
     protected void updateTextViews() {
         nameView = (EditText) findViewById(R.id.nameView);
         nameView.setText(recipe.getName());
@@ -88,13 +102,16 @@ public class RecipeActivity extends AppCompatActivity {
         instructionsView.setText(recipe.getInstructions());
     }
 
+    /**
+     * Overrides the normal back button function.
+     * This method is used to pass the recipes list back to the
+     * library activity to save any edits made by the user.
+     */
     @Override
     public void onBackPressed() {
         Intent intent = getIntent();
         intent.putExtra("recipes", recipes);
         setResult(RESULT_OK, intent);
         finish();
-        //Intent returnIntent = new Intent(RecipeActivity.this, LibraryActivity.class);
-        //startActivity(returnIntent);
     }
 }

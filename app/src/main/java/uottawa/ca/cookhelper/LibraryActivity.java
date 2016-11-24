@@ -1,4 +1,5 @@
 package uottawa.ca.cookhelper;
+
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
 import java.util.ArrayList;
 
 public class LibraryActivity extends AppCompatActivity {
@@ -17,6 +19,7 @@ public class LibraryActivity extends AppCompatActivity {
     private ListView recipeListView;                    // ListView for Recipes
     private ArrayAdapter<String> noSelectionList;       // Adapter w/ no selection
     private ArrayAdapter<String> multipleSelectionList; // Adapter w/ multiple selection
+    private boolean isEditing;                          // Flag indicates recipe list is being edited
     private final static int RECIPE_REQUEST = 0;
 
     @Override
@@ -24,34 +27,37 @@ public class LibraryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_library);
 
-
         recipes = createTestRecipes();
 
+        // Recipe names used for recipeListView labels
         recipeNames = new ArrayList<>();
-
         for (Recipe r : recipes) {
             recipeNames.add(r.getName());
         }
 
+        // Adapter init
         recipeListView = (ListView) findViewById(R.id.recipeListView);
         noSelectionList = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, recipeNames);
         multipleSelectionList = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_multiple_choice, recipeNames);
-
         recipeListView.setAdapter(noSelectionList);
+        isEditing = false;
 
-        recipeListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        // If the noSelectionList adapter is active, the onItemClickListener
+        // will open the recipe selected by the user in a RecipeActivity
+        recipeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long id) {
-                Bundle bundle = new Bundle();
+                if (!isEditing) {
+                    Bundle bundle = new Bundle();
 
-                bundle.putSerializable("position", position);
-                bundle.putSerializable("recipeList", recipes);
-                Intent i = new Intent(LibraryActivity.this, RecipeActivity.class);
-                i.putExtras(bundle);
-                startActivityForResult(i, RECIPE_REQUEST);
-
+                    bundle.putSerializable("position", position);
+                    bundle.putSerializable("recipeList", recipes);
+                    Intent i = new Intent(LibraryActivity.this, RecipeActivity.class);
+                    i.putExtras(bundle);
+                    startActivityForResult(i, RECIPE_REQUEST);
+                }
             }
         });
     }
@@ -66,6 +72,7 @@ public class LibraryActivity extends AppCompatActivity {
     protected void editBtnAction(View view) {
         makeRecipeListMultipleSelection();
         modifyButtonVisibility(View.VISIBLE);
+        isEditing = true;
     }
 
     /**
@@ -78,6 +85,7 @@ public class LibraryActivity extends AppCompatActivity {
     protected void cancelBtnAction(View view) {
         makeRecipeListNoSelection();
         modifyButtonVisibility(View.INVISIBLE);
+        isEditing = false;
     }
 
     /**
@@ -115,6 +123,14 @@ public class LibraryActivity extends AppCompatActivity {
         makeRecipeListMultipleSelection();
     }
 
+    /**
+     * Used to pass the list of recipes back from the RecipeActivity so that
+     * recipes may be edited.
+     *
+     * @param requestCode the requestCode associated with the ActivityResult
+     * @param resultCode  the resultCode associated with the ActivityResult
+     * @param intent the source intent
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == RECIPE_REQUEST) {
@@ -123,13 +139,17 @@ public class LibraryActivity extends AppCompatActivity {
             }
         }
 
+        // Update recipe names with the returned recipeList
         recipeNames = new ArrayList<String>();
         for (Recipe r : recipes) {
             recipeNames.add(r.getName());
         }
 
+        // Update the adapters to reflect current Recipe models
         noSelectionList = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, recipeNames);
+        multipleSelectionList = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_multiple_choice, recipeNames);
         makeRecipeListNoSelection();
 
     }
