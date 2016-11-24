@@ -9,4 +9,5 @@
     <string name="editRecipeTxt">Edit</string>
     <string name="okBtnTxt">OK</string>
     <string name="cancelRecipeBtnTxt">Cancel</string>
+    <string name="minutesTxt">min.</string>
 </resources>

@@ -34,7 +34,7 @@
                 android:visibility="invisible" />
 
             <Button
-                android:text="@string/cancelRecipeBtnTxt"
+                android:text="@string/cancelBtnTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/cancelBtn"
@@ -79,9 +79,6 @@
                     android:textAppearance="@android:style/TextAppearance"
                     android:layout_column="1"
                     android:paddingLeft="5sp" />
-
-
-
             </TableRow>
 
             <View
@@ -103,12 +100,14 @@
                     android:textStyle="bold"
                     android:textAppearance="@android:style/TextAppearance"/>
 
-                <TextView
+                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/countryView"
+                    android:inputType="none"
                     android:textAppearance="@android:style/TextAppearance"
-                    android:paddingLeft="5sp"/>
+                    android:layout_column="1"
+                    android:paddingLeft="5sp" />
             </TableRow>
 
             <View
@@ -130,12 +129,14 @@
                     android:textStyle="bold"
                     android:textAppearance="@android:style/TextAppearance"/>
 
-                <TextView
+                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/categoryView"
+                    android:inputType="none"
                     android:textAppearance="@android:style/TextAppearance"
-                    android:paddingLeft="5sp"/>
+                    android:layout_column="1"
+                    android:paddingLeft="5sp" />
 
             </TableRow>
 
@@ -150,7 +151,7 @@
                 android:layout_height="match_parent" >
 
                 <TextView
-                    android:text="Cooking Time: "
+                    android:text="Time (min): "
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/cookTimeLabel"
@@ -158,11 +159,13 @@
                     android:textStyle="bold"
                     android:textAppearance="@android:style/TextAppearance" />
 
-                <TextView
+                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/cookTimeView"
+                    android:inputType="none"
                     android:textAppearance="@android:style/TextAppearance"
+                    android:layout_column="1"
                     android:paddingLeft="5sp" />
             </TableRow>
 
@@ -185,12 +188,14 @@
                     android:textStyle="bold"
                     android:textAppearance="@android:style/TextAppearance"/>
 
-                <TextView
+                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/servingSizeView"
+                    android:inputType="none"
                     android:textAppearance="@android:style/TextAppearance"
-                    android:paddingLeft="5sp"/>
+                    android:layout_column="1"
+                    android:paddingLeft="5sp" />
             </TableRow>
 
             <View
@@ -212,12 +217,16 @@
                     android:textStyle="bold"
                     android:textAppearance="@android:style/TextAppearance"/>
 
-                <TextView
+                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/ingredientsView"
+                    android:inputType="none"
                     android:textAppearance="@android:style/TextAppearance"
-                    android:paddingLeft="5sp"/>
+                    android:layout_column="1"
+                    android:paddingLeft="5sp"
+                    android:textColor= "@drawable/edit_text_color"
+                    />
             </TableRow>
 
             <View
@@ -263,11 +272,14 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
 
-            <TextView
-                android:layout_width="match_parent"
+            <EditText
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/instructionsView"
-                android:textAppearance="@android:style/TextAppearance" />
+                android:inputType="none"
+                android:textAppearance="@android:style/TextAppearance"
+                android:textColor= "@drawable/edit_text_color"
+                />
         </LinearLayout>
     </LinearLayout>
 

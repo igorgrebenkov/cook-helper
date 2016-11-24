@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static android.R.attr.maxLines;
+
 public class RecipeActivity extends AppCompatActivity {
     private Recipe recipe;
     private ArrayList<Recipe> recipes;
@@ -47,6 +49,11 @@ public class RecipeActivity extends AppCompatActivity {
         updateTextViews();
     }
 
+    protected void cancelButtonAction(View view) {
+        modifyButtonVisibility(View.INVISIBLE);
+        updateTextViews();
+    }
+
     /**
      * Action associated with the edit button.
      * Makes the text fields editable.
@@ -54,12 +61,20 @@ public class RecipeActivity extends AppCompatActivity {
      */
     protected void editButtonAction(View view) {
         nameView.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
-        modifyButtonVisibility(View.VISIBLE);
-    }
+        countryView.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+        categoryView.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+        cookTimeView.setInputType(InputType.TYPE_CLASS_NUMBER);
+        servingSizeView.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-    protected void cancelButtonAction(View view) {
-        modifyButtonVisibility(View.INVISIBLE);
-        updateTextViews();
+        ingredientsView.setInputType(
+                InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        ingredientsView.setEnabled(true);
+
+        instructionsView.setInputType(
+                InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        instructionsView.setEnabled(true);
+
+        modifyButtonVisibility(View.VISIBLE);
     }
 
     /**
@@ -75,8 +90,14 @@ public class RecipeActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
-        nameView.setInputType(INPUT_NONE);
-        recipes.get(recipePosition).setName(nameView.getText().toString());
+        recipe.setName(nameView.getText().toString());
+        recipe.setCountryStyle(countryView.getText().toString());
+        recipe.setCategoryOfRecipe(categoryView.getText().toString());
+        recipe.setTimetoCook(Integer.parseInt(cookTimeView.getText().toString()));
+        recipe.setServingSize(Integer.parseInt(servingSizeView.getText().toString()));
+        recipe.setListOfIngredients(ingredientsView.getText().toString());
+        recipe.setInstructions(instructionsView.getText().toString());
+
         updateTextViews();
         modifyButtonVisibility(View.INVISIBLE);
     }
@@ -90,27 +111,34 @@ public class RecipeActivity extends AppCompatActivity {
         nameView.setInputType(INPUT_NONE);
         nameView.setBackgroundColor(0);
 
-        countryView =(TextView) findViewById(R.id.countryView);
+        countryView = (EditText) findViewById(R.id.countryView);
         countryView.setText(recipe.getCountryStyle());
+        countryView.setInputType(INPUT_NONE);
+        countryView.setBackgroundColor(0);
 
-        categoryView =(TextView) findViewById(R.id.categoryView);
+        categoryView = (EditText) findViewById(R.id.categoryView);
         categoryView.setText(recipe.getCategoryOfRecipe());
+        categoryView.setInputType(INPUT_NONE);
+        categoryView.setBackgroundColor(0);
 
-        cookTimeView =(TextView) findViewById(R.id.cookTimeView);
-        cookTimeView.setText(recipe.getTimetoCook() + " min.");
+        cookTimeView = (EditText) findViewById(R.id.cookTimeView);
+        cookTimeView.setText(Integer.toString(recipe.getTimetoCook()));
+        cookTimeView.setInputType(INPUT_NONE);
+        cookTimeView.setBackgroundColor(0);
 
-        servingSizeView =(TextView) findViewById(R.id.servingSizeView);
-        if (recipe.getServingSize() == 1) {
-            servingSizeView.setText(recipe.getServingSize() + " person");
-        } else {
-            servingSizeView.setText(recipe.getServingSize() + " people");
-        }
+        servingSizeView = (EditText) findViewById(R.id.servingSizeView);
+        servingSizeView.setText(Integer.toString(recipe.getServingSize()));
+        servingSizeView.setBackgroundColor(0);
 
-        ingredientsView = (TextView) findViewById(R.id.ingredientsView);
-        ingredientsView.setText(recipe.getListOfIngredients());
+        ingredientsView = (EditText) findViewById(R.id.ingredientsView);
+        ingredientsView.setText(recipe.getListOfIngredients().replace("\\n", "\n"));
+        ingredientsView.setEnabled(false);
+        ingredientsView.setBackgroundColor(0);
 
-        instructionsView = (TextView) findViewById(R.id.instructionsView);
-        instructionsView.setText(recipe.getInstructions());
+        instructionsView = (EditText) findViewById(R.id.instructionsView);
+        instructionsView.setText(recipe.getInstructions().replace("\\n", "\n"));
+        instructionsView.setEnabled(false);
+        instructionsView.setBackgroundColor(0);
     }
 
     /**
