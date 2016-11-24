@@ -14,9 +14,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    protected void openRecipeList(View view) {
+    protected void recipeListButtonAction(View view) {
         Intent i = new Intent(this, LibraryActivity.class);
         startActivity(i);
-
     }
 }

@@ -25,9 +25,9 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/browseAddBtn"
-            android:text="@string/browseAddBtnTxt"
-            android:onClick="openRecipeList" />
+            android:id="@+id/recipeListBtn"
+            android:text="@string/recipeListBtnTxt"
+            android:onClick="recipeListButtonAction" />
     </LinearLayout>
 
 </RelativeLayout>

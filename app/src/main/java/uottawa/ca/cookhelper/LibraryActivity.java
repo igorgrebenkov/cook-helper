@@ -20,8 +20,8 @@ public class LibraryActivity extends AppCompatActivity {
     private ListView recipeListView;                    // ListView for Recipes
     private ArrayAdapter<String> noSelectionList;       // Adapter w/ no selection
     private ArrayAdapter<String> multipleSelectionList; // Adapter w/ multiple selection
-    private boolean isEditing;                          // Flag indicates recipe list is being edited
-    private final static int RECIPE_REQUEST = 0;
+    private boolean isEditing;                          // Flag true -> recipe list is being edited
+    private final static int RECIPE_REQUEST = 0;        // Used to pass recipe list to RecipeActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,7 @@ public class LibraryActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, recipeNames);
         multipleSelectionList = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_multiple_choice, recipeNames);
+
         recipeListView.setAdapter(noSelectionList);
         isEditing = false;
 
@@ -51,9 +52,9 @@ public class LibraryActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long id) {
                 if (!isEditing) {
+                    // Use bundle to pass serialized data to RecipeActivity
                     Bundle bundle = new Bundle();
-
-                    bundle.putSerializable("position", position);
+                    bundle.putSerializable("position", position);  // index of clicked recipe
                     bundle.putSerializable("recipeList", recipes);
                     Intent i = new Intent(LibraryActivity.this, RecipeActivity.class);
                     i.putExtras(bundle);
@@ -84,9 +85,9 @@ public class LibraryActivity extends AppCompatActivity {
      * @param view the view
      */
     protected void cancelBtnAction(View view) {
+        isEditing = false;
         makeRecipeListNoSelection();
         modifyButtonVisibility(View.INVISIBLE);
-        isEditing = false;
     }
 
     /**
@@ -97,8 +98,7 @@ public class LibraryActivity extends AppCompatActivity {
      * @param view the view
      */
     protected void deleteBtnAction(View view) {
-
-        // Holds references to recipe names to delete
+        // Holds references to the recipe names we want to delete
         ArrayList<String> toDelete = new ArrayList<>();
 
         // Checks the recipeListView for checked items, and adds the
@@ -135,7 +135,7 @@ public class LibraryActivity extends AppCompatActivity {
      *
      * @param requestCode the requestCode associated with the ActivityResult
      * @param resultCode  the resultCode associated with the ActivityResult
-     * @param intent the source intent
+     * @param intent      the source intent
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {

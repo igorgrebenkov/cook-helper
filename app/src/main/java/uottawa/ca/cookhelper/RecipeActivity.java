@@ -10,10 +10,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-
-import static android.R.attr.maxLines;
 
 public class RecipeActivity extends AppCompatActivity {
     private Recipe recipe;
@@ -44,14 +41,34 @@ public class RecipeActivity extends AppCompatActivity {
                 recipes = (ArrayList<Recipe>) bundle.getSerializable(key);
             }
         }
-        recipe = recipes.get(recipePosition);
+
+        try {
+            recipe = recipes.get(recipePosition);
+        } catch (NullPointerException e) {
+            System.err.println("NullPointerException: " + e.getMessage());
+        }
 
         updateTextViews();
     }
 
-    protected void cancelButtonAction(View view) {
-        modifyButtonVisibility(View.INVISIBLE);
+    /**
+     * Action associated with the OK button.
+     * Update the Recipe's model with the user's edits and hides the keyboard.
+     * @param view the view
+     */
+    protected void okButtonAction(View view) {
+        hideKeyboard();
+
+        recipe.setName(nameView.getText().toString());
+        recipe.setCountryStyle(countryView.getText().toString());
+        recipe.setCategoryOfRecipe(categoryView.getText().toString());
+        recipe.setTimetoCook(Integer.parseInt(cookTimeView.getText().toString()));
+        recipe.setServingSize(Integer.parseInt(servingSizeView.getText().toString()));
+        recipe.setListOfIngredients(ingredientsView.getText().toString());
+        recipe.setInstructions(instructionsView.getText().toString());
+
         updateTextViews();
+        modifyButtonVisibility(View.INVISIBLE);
     }
 
     /**
@@ -67,39 +84,20 @@ public class RecipeActivity extends AppCompatActivity {
         servingSizeView.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         ingredientsView.setInputType(
-                InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         ingredientsView.setEnabled(true);
 
         instructionsView.setInputType(
-                InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         instructionsView.setEnabled(true);
 
         modifyButtonVisibility(View.VISIBLE);
     }
 
-    /**
-     * Action associated with the OK button.
-     * Update the Recipe's model with the user's edits and hides the keyboard.
-     * @param view the view
-     */
-    protected void okButtonAction(View view) {
-        // Hide keyboard
-        view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-
-        recipe.setName(nameView.getText().toString());
-        recipe.setCountryStyle(countryView.getText().toString());
-        recipe.setCategoryOfRecipe(categoryView.getText().toString());
-        recipe.setTimetoCook(Integer.parseInt(cookTimeView.getText().toString()));
-        recipe.setServingSize(Integer.parseInt(servingSizeView.getText().toString()));
-        recipe.setListOfIngredients(ingredientsView.getText().toString());
-        recipe.setInstructions(instructionsView.getText().toString());
-
-        updateTextViews();
+    protected void cancelButtonAction(View view) {
+        hideKeyboard();
         modifyButtonVisibility(View.INVISIBLE);
+        updateTextViews();
     }
 
     /**
@@ -165,5 +163,16 @@ public class RecipeActivity extends AppCompatActivity {
         okButton.setVisibility(visibility);
         Button cancelButton = (Button) findViewById(R.id.cancelBtn);
         cancelButton.setVisibility(visibility);
+    }
+
+    /**
+     * Hides the on-screen keyboard (if it's open).
+     */
+    private void hideKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }
