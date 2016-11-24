@@ -18,4 +18,9 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this, LibraryActivity.class);
         startActivity(i);
     }
+
+    protected void searchRecipesButtonAction(View view) {
+        Intent i = new Intent(this, SearchActivity.class);
+        startActivity(i);
+    }
 }
