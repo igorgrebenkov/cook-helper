@@ -10,6 +10,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="uottawa.ca.cookhelper.RecipeActivity">
 
+
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -18,15 +20,33 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:gravity="end">
+
+            <Button
+                android:text="@string/okBtnTxt"
+                android:layout_height="wrap_content"
+                android:id="@+id/okBtn"
+                android:layout_width="wrap_content"
+                android:layout_gravity="end"
+                android:onClick="okButtonAction" />
+
+            <Button
+                android:text="@string/cancelRecipeBtnTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cancelBtn"
+                android:layout_gravity="end" />
 
             <Button
                 android:text="@string/editRecipeTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/editRecipeBtn"
-                android:layout_weight="1"
-                android:onClick="editButtonAction" />
+                android:onClick="editButtonAction"
+                android:layout_gravity="end" />
+
         </LinearLayout>
 
         <TableLayout
@@ -48,14 +68,14 @@
                     android:textStyle="bold"
                     android:textAppearance="@android:style/TextAppearance"
                     android:layout_column="0" />
-
-                <TextView
+                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/nameView"
+                    android:inputType="none"
                     android:textAppearance="@android:style/TextAppearance"
                     android:layout_column="1"
-                    android:paddingLeft="5sp"/>
+                    android:paddingLeft="5sp" />
 
 
 
@@ -231,7 +251,7 @@
 
 
         </TableLayout>
-        
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"

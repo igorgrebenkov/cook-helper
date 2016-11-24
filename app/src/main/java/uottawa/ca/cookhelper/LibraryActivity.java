@@ -12,18 +12,21 @@ import java.util.ArrayList;
 
 public class LibraryActivity extends AppCompatActivity {
 
-    ArrayList<Recipe> recipes;                  // List of recipes
-    ArrayList<String> recipeNames;              // List of recipe names
-    ListView recipeListView;                    // ListView for Recipes
-    ArrayAdapter<String> noSelectionList;       // Adapter for recipeListView w/ no selection
-    ArrayAdapter<String> multipleSelectionList; // Adapter for recipeListView w/ multiple selection
+    private ArrayList<Recipe> recipes;                  // List of recipes
+    private ArrayList<String> recipeNames;              // List of recipe names
+    private ListView recipeListView;                    // ListView for Recipes
+    private ArrayAdapter<String> noSelectionList;       // Adapter w/ no selection
+    private ArrayAdapter<String> multipleSelectionList; // Adapter w/ multiple selection
+    private final static int RECIPE_REQUEST = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_library);
 
-        recipes = createrecipeRecipes();
+
+        recipes = createTestRecipes();
+
         recipeNames = new ArrayList<>();
 
         for (Recipe r : recipes) {
@@ -43,10 +46,11 @@ public class LibraryActivity extends AppCompatActivity {
             public void onItemClick(AdapterView parent, View view, int position, long id) {
                 Bundle bundle = new Bundle();
 
-                bundle.putSerializable("recipe", recipes.get(position));
+                bundle.putSerializable("position", position);
+                bundle.putSerializable("recipeList", recipes);
                 Intent i = new Intent(LibraryActivity.this, RecipeActivity.class);
                 i.putExtras(bundle);
-                startActivity(i);
+                startActivityForResult(i, RECIPE_REQUEST);
 
             }
         });
@@ -97,7 +101,6 @@ public class LibraryActivity extends AppCompatActivity {
             }
         }
 
-
         // Delete the selected items from the Recipe list and recipe name list
         for (String s : toDelete) {
             for (Recipe r : recipes) {
@@ -110,6 +113,25 @@ public class LibraryActivity extends AppCompatActivity {
 
         // Used to refresh the Recipe list view to reflect deletions
         makeRecipeListMultipleSelection();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == RECIPE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                recipes = (ArrayList<Recipe>) intent.getSerializableExtra("recipes");
+            }
+        }
+
+        recipeNames = new ArrayList<String>();
+        for (Recipe r : recipes) {
+            recipeNames.add(r.getName());
+        }
+
+        noSelectionList = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, recipeNames);
+        makeRecipeListNoSelection();
+
     }
 
     /************************* Private helper functions *************************/
@@ -141,7 +163,7 @@ public class LibraryActivity extends AppCompatActivity {
         cancelButton.setVisibility(visibility);
     }
 
-    private ArrayList<Recipe> createrecipeRecipes() {
+    private ArrayList<Recipe> createTestRecipes() {
         Recipe a = new Recipe("Tomato Sauce Pasta",
                 "Italian",
                 "Dinner",

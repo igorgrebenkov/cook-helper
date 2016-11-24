@@ -1,19 +1,31 @@
 package uottawa.ca.cookhelper;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class RecipeActivity extends AppCompatActivity {
-    Recipe recipe;
-    TextView nameView;
-    TextView countryView;
-    TextView categoryView;
-    TextView cookTimeView;
-    TextView servingSizeView;
-    TextView ingredientsView;
-    TextView instructionsView;
+    private Recipe recipe;
+    private ArrayList<Recipe> recipes;
+    private int recipePosition;
+    private TextView nameView;
+    private TextView countryView;
+    private TextView categoryView;
+    private TextView cookTimeView;
+    private TextView servingSizeView;
+    private TextView ingredientsView;
+    private TextView instructionsView;
+    private ArrayList<TextView> textViews;
+    private final static int INPUT_NONE = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,11 +33,37 @@ public class RecipeActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         for (String key : bundle.keySet()) {
-            recipe = (Recipe) bundle.getSerializable(key);
+            if (key.equals("position")) {
+                recipePosition = (int) bundle.getSerializable(key);
+            } else {
+                recipes = (ArrayList<Recipe>) bundle.getSerializable(key);
+            }
         }
 
-        nameView = (TextView) findViewById(R.id.nameView);
+        recipe = recipes.get(recipePosition);
+
+        updateTextViews();
+    }
+
+    protected void editButtonAction(View view) {
+        nameView.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+    }
+
+    protected void okButtonAction(View view) {
+        // Hide keyboard
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+        nameView.setInputType(INPUT_NONE);
+        recipes.get(recipePosition).setName(nameView.getText().toString());
+        updateTextViews();
+    }
+
+    protected void updateTextViews() {
+        nameView = (EditText) findViewById(R.id.nameView);
         nameView.setText(recipe.getName());
+        nameView.setInputType(INPUT_NONE);
+        nameView.setBackgroundColor(0);
 
         countryView =(TextView) findViewById(R.id.countryView);
         countryView.setText(recipe.getCountryStyle());
@@ -50,9 +88,13 @@ public class RecipeActivity extends AppCompatActivity {
         instructionsView.setText(recipe.getInstructions());
     }
 
-    protected void editButtonAction(View view) {
-
-
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = getIntent();
+        intent.putExtra("recipes", recipes);
+        setResult(RESULT_OK, intent);
+        finish();
+        //Intent returnIntent = new Intent(RecipeActivity.this, LibraryActivity.class);
+        //startActivity(returnIntent);
     }
 }

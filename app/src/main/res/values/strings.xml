@@ -7,4 +7,6 @@
     <string name="cancelBtnTxt">Cancel</string>
     <string name="nameLabelTxt">Name:</string>
     <string name="editRecipeTxt">Edit</string>
+    <string name="okBtnTxt">OK</string>
+    <string name="cancelRecipeBtnTxt">Cancel</string>
 </resources>
