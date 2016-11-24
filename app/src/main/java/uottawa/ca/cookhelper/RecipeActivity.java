@@ -142,7 +142,7 @@ public class RecipeActivity extends AppCompatActivity {
     /**
      * Overrides the normal back button function.
      * This method is used to pass the recipes list back to the
-     * library activity to save any edits made by the user.
+     * LibraryActivity to save any edits made by the user.
      */
     @Override
     public void onBackPressed() {

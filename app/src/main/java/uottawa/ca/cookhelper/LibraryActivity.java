@@ -28,7 +28,7 @@ public class LibraryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_library);
 
-        recipes = createTestRecipes();
+        recipes = (ArrayList<Recipe>) getIntent().getSerializableExtra("recipeList");
 
         // Recipe names used for recipeListView labels
         recipeNames = new ArrayList<>();
@@ -130,7 +130,20 @@ public class LibraryActivity extends AppCompatActivity {
     }
 
     /**
-     * Used to pass the list of recipes back from the RecipeActivity so that
+     * Overrides the normal back button function.
+     * This method is used to pass the recipes list back to the
+     * MainActivity to save any edits made by the user.
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = getIntent();
+        intent.putExtra("recipes", recipes);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    /**
+     * Used to get the list of recipes from the RecipeActivity so that
      * recipes may be edited.
      *
      * @param requestCode the requestCode associated with the ActivityResult
@@ -157,7 +170,6 @@ public class LibraryActivity extends AppCompatActivity {
         multipleSelectionList = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_multiple_choice, recipeNames);
         makeRecipeListNoSelection();
-
     }
 
     /************************* Private helper functions *************************/
@@ -187,50 +199,5 @@ public class LibraryActivity extends AppCompatActivity {
         deleteButton.setVisibility(visibility);
         Button cancelButton = (Button) findViewById(R.id.cancelBtn);
         cancelButton.setVisibility(visibility);
-    }
-
-    private ArrayList<Recipe> createTestRecipes() {
-        Recipe a = new Recipe("Tomato Sauce Pasta",
-                "Italian",
-                "Dinner",
-                45,
-                1,
-                "3 Tomatoes\n" + "4 oz. Pasta \n" +
-                        "2 Cloves Garlic \n" +
-                        "3 tsp Salt",
-                "1. Mash tomatoes into a paste. \n" +
-                        "2. Crush garlic and add to tomato paste with the salt. \n" +
-                        "3. Saute sauce at med-hi heat for 20 minutes. \n" +
-                        "4. While the sauce is sauteeing, boil pasta until al-dente. \n" +
-                        "5. Strain pasta and mix in a bowl with the sauce.");
-
-        Recipe b = new Recipe("Chocolate Milkshake",
-                "American",
-                "Dessert",
-                20,
-                2,
-                "4 scoops chocolate ice cream\n" +
-                        "2 cups milk\n" +
-                        "1 can whipped cream",
-                "1. Put ice cream and milk into a blender. \n" +
-                        "2. Blend until shake is a creamy consistency. \n" +
-                        "3. Pour into glass and cover with whipped cream.");
-
-        Recipe c = new Recipe("Bagel & Lox with Cream Cheese",
-                "American",
-                "Breakfast",
-                20,
-                2,
-                "4tbs Cream Cheese \n" +
-                        "9 oz. Lox \n" +
-                        "1 Bagel",
-                "1. Cut bagel in half horizontally. \n" +
-                        "2. Spread cream cheese on both sides of the bagel. \n" +
-                        "3. Cover both sides of the bagel with lox.");
-        ArrayList<Recipe> r = new ArrayList<>();
-        r.add(a);
-        r.add(b);
-        r.add(c);
-        return r;
     }
 }
