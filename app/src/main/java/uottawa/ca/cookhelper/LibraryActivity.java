@@ -125,18 +125,6 @@ public class LibraryActivity extends AppCompatActivity {
             }
 
         }
-
-        /*
-        for (String s : toDelete) {
-            for (Recipe r : recipes) {
-                if (r.getName().equals(s)) {
-                    recipes.remove(r);
-                }
-            }
-            recipeNames.remove(s);
-        }
-        */
-
         // Used to refresh the Recipe list view to reflect deletions
         makeRecipeListMultipleSelection();
     }

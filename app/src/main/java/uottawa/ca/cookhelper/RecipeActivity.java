@@ -69,8 +69,11 @@ public class RecipeActivity extends AppCompatActivity {
      */
     protected void okButtonAction(View view) {
         // Hide keyboard
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
 
         nameView.setInputType(INPUT_NONE);
         recipes.get(recipePosition).setName(nameView.getText().toString());
