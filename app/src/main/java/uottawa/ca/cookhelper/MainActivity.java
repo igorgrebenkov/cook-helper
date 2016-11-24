@@ -27,12 +27,12 @@ public class MainActivity extends AppCompatActivity {
     protected void searchRecipesButtonAction(View view) {
         Intent i = new Intent(this, SearchActivity.class);
         i.putExtra("recipeList", recipes);
-        startActivity(i);
+        startActivityForResult(i, RECIPE_REQUEST);
     }
 
     /**
      * Used to pass the list of recipes back from the RecipeActivity so that
-     * recipes may be edited.
+     * recipes may be edited and saved.
      *
      * @param requestCode the requestCode associated with the ActivityResult
      * @param resultCode  the resultCode associated with the ActivityResult

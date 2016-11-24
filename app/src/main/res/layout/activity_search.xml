@@ -13,19 +13,28 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
             android:id="@+id/searchText"
-            android:hint="Enter a search query..." />
+            android:hint="Enter a search query..."
+            android:layout_weight="1" />
+
+        <Button
+            android:text="@string/goSearchBtnTxt"
+            android:layout_width="match_parent"
+            android:id="@+id/goSearchBtn"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:id="@+id/searchResultsListView" />
     </LinearLayout>
 
 </RelativeLayout>
