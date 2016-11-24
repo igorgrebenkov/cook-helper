@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<Recipe> recipes;  // List of recipes
+    private ArrayList<Recipe> recipes;            // List of recipes
     private final static int RECIPE_REQUEST = 0;  // Used to return recipes list from RecipeActivity
 
     @Override
@@ -28,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void searchRecipesButtonAction(View view) {
         Intent i = new Intent(this, SearchActivity.class);
+        i.putExtra("recipeList", recipes);
         startActivity(i);
     }
 

@@ -13,18 +13,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class RecipeActivity extends AppCompatActivity {
-    private Recipe recipe;
-    private ArrayList<Recipe> recipes;
-    private int recipePosition;
-    private TextView nameView;
-    private TextView countryView;
-    private TextView categoryView;
-    private TextView cookTimeView;
-    private TextView servingSizeView;
-    private TextView ingredientsView;
-    private TextView instructionsView;
-    private ArrayList<TextView> textViews;
-    private final static int INPUT_NONE = 0;
+    private Recipe recipe;                      // The currently viewed recipe
+    private ArrayList<Recipe> recipes;          // The list of recipes
+    private int recipePosition;                 // The position of the current recipe
+    private TextView nameView;                  // The TextView for the recipe's name
+    private TextView countryView;               // The TextView for the recipe's country
+    private TextView categoryView;              // The TextView for the recipe's category
+    private TextView cookTimeView;              // The TextView for the recipe's cooking time
+    private TextView servingSizeView;           // The TextView for the recipe's serving size
+    private TextView ingredientsView;           // The TextView for the recipe's ingredients
+    private TextView instructionsView;          // The TextView for the recipe's instructions
+    private final static int INPUT_NONE = 0;    // Default input type for TextViews (uneditable)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
