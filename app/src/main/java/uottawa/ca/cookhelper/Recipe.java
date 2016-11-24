@@ -1,6 +1,7 @@
 package uottawa.ca.cookhelper;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Recipe implements Serializable {
     private String name;
@@ -10,6 +11,19 @@ public class Recipe implements Serializable {
     private int servingSize;
     private String listOfIngredients;
     private String instructions;
+
+    public Recipe() {
+        char[] chars = new char[40];
+        Arrays.fill(chars, ' ');
+        String s = new String(chars);
+        name = s;
+        countryStyle = s;
+        categoryOfRecipe = s;
+        timetoCook = 0;
+        servingSize = 0;
+        listOfIngredients = s;
+        instructions = s;
+    }
 
     public Recipe(String name, String countryStyle, String categoryOfRecipe, int timetoCook, int servingSize, String listOfIngredients, String instructions) {
         this.name = name;

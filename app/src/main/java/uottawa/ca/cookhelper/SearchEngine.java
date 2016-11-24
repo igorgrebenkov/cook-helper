@@ -34,10 +34,4 @@ public class SearchEngine {
             System.out.println(s);
         }
     }
-
-
-
-
-
-
 }

@@ -49,6 +49,14 @@
                 android:onClick="editBtnAction"
                 android:layout_weight="1" />
 
+            <Button
+                android:text="@string/addBtnTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/addBtn"
+                android:layout_weight="1"
+                android:onClick="addButtonAction" />
+
         </LinearLayout>
 
         <ListView

@@ -12,4 +12,5 @@
     <string name="minutesTxt">min.</string>
     <string name="recipeListBtnTxt">Recipe List</string>
     <string name="goSearchBtnTxt">Search</string>
+    <string name="addBtnTxt">Add</string>
 </resources>

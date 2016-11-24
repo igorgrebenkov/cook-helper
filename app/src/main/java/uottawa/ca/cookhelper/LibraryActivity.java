@@ -52,16 +52,16 @@ public class LibraryActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long id) {
                 if (!isEditing) {
-                    // Use bundle to pass serialized data to RecipeActivity
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("position", position);  // index of clicked recipe
-                    bundle.putSerializable("recipeList", recipes);
-                    Intent i = new Intent(LibraryActivity.this, RecipeActivity.class);
-                    i.putExtras(bundle);
-                    startActivityForResult(i, RECIPE_REQUEST);
+                    switchToRecipeActivity(position);
                 }
             }
         });
+    }
+
+
+    protected void addButtonAction(View view) {
+        recipes.add(new Recipe());
+        switchToRecipeActivity(recipes.size() - 1);
     }
 
     /**
@@ -199,5 +199,15 @@ public class LibraryActivity extends AppCompatActivity {
         deleteButton.setVisibility(visibility);
         Button cancelButton = (Button) findViewById(R.id.cancelBtn);
         cancelButton.setVisibility(visibility);
+    }
+
+    private void switchToRecipeActivity(int position) {
+        // Use bundle to pass serialized data to RecipeActivity
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("position", position);  // index of clicked recipe
+        bundle.putSerializable("recipeList", recipes);
+        Intent i = new Intent(LibraryActivity.this, RecipeActivity.class);
+        i.putExtras(bundle);
+        startActivityForResult(i, RECIPE_REQUEST);
     }
 }
