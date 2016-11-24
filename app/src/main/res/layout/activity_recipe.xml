@@ -30,14 +30,17 @@
                 android:id="@+id/okBtn"
                 android:layout_width="wrap_content"
                 android:layout_gravity="end"
-                android:onClick="okButtonAction" />
+                android:onClick="okButtonAction"
+                android:visibility="invisible" />
 
             <Button
                 android:text="@string/cancelRecipeBtnTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/cancelBtn"
-                android:layout_gravity="end" />
+                android:layout_gravity="end"
+                android:visibility="invisible"
+                android:onClick="cancelButtonAction" />
 
             <Button
                 android:text="@string/editRecipeTxt"

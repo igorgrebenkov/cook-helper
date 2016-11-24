@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -53,6 +54,12 @@ public class RecipeActivity extends AppCompatActivity {
      */
     protected void editButtonAction(View view) {
         nameView.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+        modifyButtonVisibility(View.VISIBLE);
+    }
+
+    protected void cancelButtonAction(View view) {
+        modifyButtonVisibility(View.INVISIBLE);
+        updateTextViews();
     }
 
     /**
@@ -68,6 +75,7 @@ public class RecipeActivity extends AppCompatActivity {
         nameView.setInputType(INPUT_NONE);
         recipes.get(recipePosition).setName(nameView.getText().toString());
         updateTextViews();
+        modifyButtonVisibility(View.INVISIBLE);
     }
 
     /**
@@ -113,5 +121,18 @@ public class RecipeActivity extends AppCompatActivity {
         intent.putExtra("recipes", recipes);
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    /************************* Private helper functions *************************/
+    /**
+     * Modifies the visibility of delete/cancel buttons.
+     *
+     * @param visibility the desired visibility for the buttons
+     */
+    private void modifyButtonVisibility(int visibility) {
+        Button okButton = (Button) findViewById(R.id.okBtn);
+        okButton.setVisibility(visibility);
+        Button cancelButton = (Button) findViewById(R.id.cancelBtn);
+        cancelButton.setVisibility(visibility);
     }
 }

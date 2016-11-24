@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class LibraryActivity extends AppCompatActivity {
 
@@ -70,9 +71,9 @@ public class LibraryActivity extends AppCompatActivity {
      * @param view the view
      */
     protected void editBtnAction(View view) {
+        isEditing = true;
         makeRecipeListMultipleSelection();
         modifyButtonVisibility(View.VISIBLE);
-        isEditing = true;
     }
 
     /**
@@ -110,6 +111,22 @@ public class LibraryActivity extends AppCompatActivity {
         }
 
         // Delete the selected items from the Recipe list and recipe name list
+        Iterator<String> iterNamesToDelete = toDelete.iterator();
+        Iterator<Recipe> iterRecipesToDelete = recipes.iterator();
+
+        while (iterNamesToDelete.hasNext()) {
+            String name = iterNamesToDelete.next();
+            recipeNames.remove(name);
+            while (iterRecipesToDelete.hasNext()) {
+                Recipe r = iterRecipesToDelete.next();
+                if (name.equals(r.getName())) {
+                    iterRecipesToDelete.remove();
+                }
+            }
+
+        }
+
+        /*
         for (String s : toDelete) {
             for (Recipe r : recipes) {
                 if (r.getName().equals(s)) {
@@ -118,6 +135,7 @@ public class LibraryActivity extends AppCompatActivity {
             }
             recipeNames.remove(s);
         }
+        */
 
         // Used to refresh the Recipe list view to reflect deletions
         makeRecipeListMultipleSelection();
