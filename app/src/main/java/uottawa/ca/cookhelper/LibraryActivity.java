@@ -1,26 +1,21 @@
 package uottawa.ca.cookhelper;
-
-import android.nfc.Tag;
-import android.support.v4.widget.SimpleCursorAdapter;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
-import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-
 import java.util.ArrayList;
-
-import static uottawa.ca.cookhelper.R.id.deleteBtn;
 
 public class LibraryActivity extends AppCompatActivity {
 
-    ArrayList<String> test = new ArrayList<String>();
+    ArrayList<Recipe> recipes;                  // List of recipes
+    ArrayList<String> recipeNames;              // List of recipe names
     ListView recipeListView;                    // ListView for Recipes
-    ArrayAdapter<String> noSelectionList;   // Adapter for recipeListView w/ no selection
+    ArrayAdapter<String> noSelectionList;       // Adapter for recipeListView w/ no selection
     ArrayAdapter<String> multipleSelectionList; // Adapter for recipeListView w/ multiple selection
 
     @Override
@@ -28,19 +23,33 @@ public class LibraryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_library);
 
-        test.add("test1");
-        test.add("test2");
-        test.add("test3");
-        test.add("test4");
-        test.add("test5");
+        recipes = createrecipeRecipes();
+        recipeNames = new ArrayList<>();
+
+        for (Recipe r : recipes) {
+            recipeNames.add(r.getName());
+        }
 
         recipeListView = (ListView) findViewById(R.id.recipeListView);
         noSelectionList = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, test);
+                android.R.layout.simple_list_item_1, recipeNames);
         multipleSelectionList = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_multiple_choice, test);
+                android.R.layout.simple_list_item_multiple_choice, recipeNames);
 
         recipeListView.setAdapter(noSelectionList);
+
+        recipeListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView parent, View view, int position, long id) {
+                Bundle bundle = new Bundle();
+
+                bundle.putSerializable("recipe", recipes.get(position));
+                Intent i = new Intent(LibraryActivity.this, RecipeActivity.class);
+                i.putExtras(bundle);
+                startActivity(i);
+
+            }
+        });
     }
 
     /**
@@ -76,21 +85,27 @@ public class LibraryActivity extends AppCompatActivity {
      */
     protected void deleteBtnAction(View view) {
 
-        // Holds references to Recipes to delete
+        // Holds references to recipe names to delete
         ArrayList<String> toDelete = new ArrayList<>();
 
         // Checks the recipeListView for checked items, and adds the
-        // Recipes at that index to the toDelete ArrayList
+        // recipe name at that index to the toDelete ArrayList
         SparseBooleanArray checked = recipeListView.getCheckedItemPositions();
         for (int i = 0; i < recipeListView.getCount(); i++) {
             if (checked.get(i)) {
-                toDelete.add(test.get(i));
+                toDelete.add(recipeNames.get(i));
             }
         }
 
-        // Delete the selected items from the Recipe list
+
+        // Delete the selected items from the Recipe list and recipe name list
         for (String s : toDelete) {
-            test.remove(s);
+            for (Recipe r : recipes) {
+                if (r.getName().equals(s)) {
+                    recipes.remove(r);
+                }
+            }
+            recipeNames.remove(s);
         }
 
         // Used to refresh the Recipe list view to reflect deletions
@@ -124,5 +139,50 @@ public class LibraryActivity extends AppCompatActivity {
         deleteButton.setVisibility(visibility);
         Button cancelButton = (Button) findViewById(R.id.cancelBtn);
         cancelButton.setVisibility(visibility);
+    }
+
+    private ArrayList<Recipe> createrecipeRecipes() {
+        Recipe a = new Recipe("Tomato Sauce Pasta",
+                "Italian",
+                "Dinner",
+                45,
+                1,
+                "3 Tomatoes\n" + "4 oz. Pasta \n" +
+                        "2 Cloves Garlic \n" +
+                        "3 tsp Salt",
+                "1. Mash tomatoes into a paste. \n" +
+                        "2. Crush garlic and add to tomato paste with the salt. \n" +
+                        "3. Saute sauce at med-hi heat for 20 minutes. \n" +
+                        "4. While the sauce is sauteeing, boil pasta until al-dente. \n" +
+                        "5. Strain pasta and mix in a bowl with the sauce.");
+
+        Recipe b = new Recipe("Chocolate Milkshake",
+                "American",
+                "Dessert",
+                20,
+                2,
+                "4 scoops chocolate ice cream\n" +
+                        "2 cups milk\n" +
+                        "1 can whipped cream",
+                "1. Put ice cream and milk into a blender. \n" +
+                        "2. Blend until shake is a creamy consistency. \n" +
+                        "3. Pour into glass and cover with whipped cream.");
+
+        Recipe c = new Recipe("Bagel & Lox with Cream Cheese",
+                "American",
+                "Breakfast",
+                20,
+                2,
+                "4tbs Cream Cheese \n" +
+                        "9 oz. Lox \n" +
+                        "1 Bagel",
+                "1. Cut bagel in half horizontally. \n" +
+                        "2. Spread cream cheese on both sides of the bagel. \n" +
+                        "3. Cover both sides of the bagel with lox.");
+        ArrayList<Recipe> r = new ArrayList<>();
+        r.add(a);
+        r.add(b);
+        r.add(c);
+        return r;
     }
 }

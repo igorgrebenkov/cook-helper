@@ -5,4 +5,6 @@
     <string name="deleteBtnTxt">Delete</string>
     <string name="editBtnTxt">Edit</string>
     <string name="cancelBtnTxt">Cancel</string>
+    <string name="nameLabelTxt">Name:</string>
+    <string name="editRecipeTxt">Edit</string>
 </resources>
