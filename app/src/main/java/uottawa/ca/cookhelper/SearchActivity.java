@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -34,9 +35,6 @@ public class SearchActivity extends AppCompatActivity {
         // Adapter init
         recipeListView = (ListView) findViewById(R.id.searchResultsListView);
 
-        if (recipeListView == null) {
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        }
         noSelectionList = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, recipeNames);
         recipeListView.setAdapter(noSelectionList);
@@ -55,6 +53,13 @@ public class SearchActivity extends AppCompatActivity {
                 startActivityForResult(i, RECIPE_REQUEST);
             }
         });
+    }
+
+    protected void searchButtonAction(View view) {
+        TextView searchView = (TextView) findViewById(R.id.searchText);
+        String searchString = searchView.getText().toString();
+        SearchEngine s = new SearchEngine(recipes, searchString);
+        s.printTokens();
     }
 
     /**
