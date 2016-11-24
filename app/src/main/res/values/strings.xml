@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">CookHelper</string>
-    <string name="searchBtnTxt">Search Recipe</string>
+    <string name="searchBtnTxt">Search Recipes</string>
     <string name="browseAddBtnTxt">Browse/Add Recipe</string>
     <string name="deleteBtnTxt">Delete</string>
     <string name="editBtnTxt">Edit</string>
