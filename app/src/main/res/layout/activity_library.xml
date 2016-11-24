@@ -13,12 +13,49 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end">
+
+            <Button
+                android:text="@string/deleteBtnTxt"
+                android:layout_width="wrap_content"
+                android:id="@+id/deleteBtn"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="invisible"
+                android:onClick="deleteBtnAction" />
+
+            <Button
+                android:text="@string/cancelBtnTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cancelBtn"
+                android:layout_weight="1"
+                android:visibility="invisible"
+                android:onClick="cancelBtnAction" />
+
+            <Button
+                android:text="@string/editBtnTxt"
+                android:layout_width="76dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/editBtn"
+                android:layout_gravity="end"
+                android:onClick="editBtnAction"
+                android:layout_weight="1" />
+
+        </LinearLayout>
 
         <ListView
+            android:id="@+id/recipeListView"
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/recipeListView" />
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 </RelativeLayout>
