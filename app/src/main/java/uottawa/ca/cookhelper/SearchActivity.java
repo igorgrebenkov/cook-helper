@@ -59,7 +59,7 @@ public class SearchActivity extends AppCompatActivity {
         TextView searchView = (TextView) findViewById(R.id.searchText);
         String searchString = searchView.getText().toString();
         SearchEngine s = new SearchEngine(recipes, searchString);
-        s.printTokens();
+        s.printPostFix();
     }
 
     /**
