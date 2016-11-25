@@ -10,11 +10,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class SearchActivity extends AppCompatActivity {
     ArrayList<Recipe> recipes;                      // The list of recipes
-    ArrayList<String> recipeNames;                  // The list of recipe names
-    private ListView recipeListView;                // ListView for Recipes
+    ArrayList<String> searchResultNames;                  // The list of recipe names
+    HashSet<Recipe> searchResults;
+    private ListView searchResultView;                // ListView for Recipes
     private ArrayAdapter<String> noSelectionList;   // Adapter w/ no selection
     private final static int RECIPE_REQUEST = 0;  // Used to return recipes list from RecipeActivity
 
@@ -26,22 +28,18 @@ public class SearchActivity extends AppCompatActivity {
 
         recipes = (ArrayList<Recipe>) getIntent().getSerializableExtra("recipeList");
 
-        // Recipe names used for recipeListView labels
-        recipeNames = new ArrayList<>();
-        for (Recipe r : recipes) {
-            recipeNames.add(r.getName());
-        }
+        searchResultNames = new ArrayList<>();
 
         // Adapter init
-        recipeListView = (ListView) findViewById(R.id.searchResultsListView);
+        searchResultView = (ListView) findViewById(R.id.searchResultsListView);
 
         noSelectionList = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, recipeNames);
-        recipeListView.setAdapter(noSelectionList);
+                android.R.layout.simple_list_item_1, searchResultNames);
+        searchResultView.setAdapter(noSelectionList);
 
         // If the noSelectionList adapter is active, the onItemClickListener
         // will open the recipe selected by the user in a RecipeActivity
-        recipeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        searchResultView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long id) {
                 // Use bundle to pass serialized data to RecipeActivity
@@ -56,12 +54,25 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     protected void searchButtonAction(View view) {
+        searchResultNames = new ArrayList<>();
+
         TextView searchView = (TextView) findViewById(R.id.searchText);
         String searchString = searchView.getText().toString();
         SearchEngine s = new SearchEngine(recipes, searchString);
-        //s.printPostFix();
-        //s.printTokens();
-        s.printSearchResults();
+        searchResults = s.getSearchResults();
+        //s.printSearchResults();
+        s.printPostFix();
+
+        for (Recipe r : searchResults) {
+            searchResultNames.add(r.getName());
+        }
+
+        // Adapter init
+        searchResultView = (ListView) findViewById(R.id.searchResultsListView);
+
+        noSelectionList = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, searchResultNames);
+        searchResultView.setAdapter(noSelectionList);
     }
 
     /**
@@ -79,18 +90,6 @@ public class SearchActivity extends AppCompatActivity {
                 recipes = (ArrayList<Recipe>) intent.getSerializableExtra("recipes");
             }
         }
-
-        // Update recipe names with the returned recipeList
-        recipeNames = new ArrayList<>();
-        for (Recipe r : recipes) {
-            recipeNames.add(r.getName());
-        }
-
-        // Update the adapters to reflect current Recipe models
-        noSelectionList = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, recipeNames);
-        recipeListView.setAdapter(noSelectionList);
-
     }
 
     /**

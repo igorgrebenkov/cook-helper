@@ -9,11 +9,11 @@ import java.util.Set;
 import java.util.Stack;
 
 public class SearchEngine {
-    ArrayList<Recipe> recipes;  // The list of recipes
-    String searchString;        // The user's input in string form
-    ArrayList<String> tokens;
-    ArrayList<String> postFix;
-    HashSet<Recipe> searchResults;
+    private ArrayList<Recipe> recipes;  // The list of recipes
+    private String searchString;        // The user's input in string form
+    private ArrayList<String> tokens;
+    private ArrayList<String> postFix;
+    private HashSet<Recipe> searchResults;
 
     public SearchEngine(ArrayList<Recipe> recipes, String searchString) {
         this.recipes = recipes;
@@ -21,6 +21,10 @@ public class SearchEngine {
         tokens = tokenize(searchString);
         postFix = toPostfix(tokens);
         searchResults = evaluate();
+    }
+
+    public HashSet<Recipe> getSearchResults() {
+        return searchResults;
     }
 
     private ArrayList<String> tokenize(String s) {
@@ -44,6 +48,9 @@ public class SearchEngine {
             }
         }
 
+        if (!token.equals("")) {
+            ret.add(token);
+        }
 
         for (int i = 0; i < ret.size() - 1; i++) {
             String curr = ret.get(i);
@@ -92,18 +99,28 @@ public class SearchEngine {
     private HashSet<Recipe> evaluate() {
         Stack<String> eval = new Stack<>();
         ArrayList<String> operands = new ArrayList<>();
-
         HashSet<Recipe> evaluated = new HashSet<>();
 
-        for (String t : postFix) {
-            if (t.equals("AND") || t.equals("OR") || t.equals("NOT")) {
-                while (!eval.isEmpty()) {
-                    operands.add(eval.pop());
+        if (postFix.size() == 1) {
+            for (Recipe r : recipes) {
+                for (String t : postFix) {
+                    if (r.getListOfIngredients().contains(t)) {
+                        evaluated.add(r);
+                    }
                 }
-                evaluated.addAll(performOperation(t, operands));
-                operands = new ArrayList<>();
-            } else {
-                eval.push(t);
+            }
+
+        } else {
+            for (String t : postFix) {
+                if (t.equals("AND") || t.equals("OR") || t.equals("NOT")) {
+                    while (!eval.isEmpty()) {
+                        operands.add(eval.pop());
+                    }
+                    evaluated.addAll(performOperation(t, operands));
+                    operands = new ArrayList<>();
+                } else {
+                    eval.push(t);
+                }
             }
         }
         return evaluated;
