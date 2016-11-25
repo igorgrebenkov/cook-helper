@@ -147,6 +147,7 @@ public class RecipeActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = getIntent();
         intent.putExtra("recipes", recipes);
+        intent.putExtra("recipe", recipe);
         setResult(RESULT_OK, intent);
         finish();
     }
