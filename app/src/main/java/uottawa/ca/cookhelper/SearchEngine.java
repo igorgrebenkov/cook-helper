@@ -57,7 +57,7 @@ public class SearchEngine {
             String next = ret.get(i + 1);
 
             if (!(curr.equals("(") || curr.equals("AND") || curr.equals("OR"))) {
-                if (!(next.equals(")") ||next.equals("AND") || next.equals("OR"))) {
+                if (!(next.equals(")") || next.equals("AND") || next.equals("OR"))) {
                     curr = curr + " " + next;
                     ret.add(i, curr);
                     ret.remove(i + 1);
@@ -100,23 +100,26 @@ public class SearchEngine {
         Stack<String> eval = new Stack<>();
         ArrayList<String> operands = new ArrayList<>();
         HashSet<Recipe> evaluated = new HashSet<>();
+        String lastOperator = "";
 
         if (postFix.size() == 1) {
             for (Recipe r : recipes) {
                 for (String t : postFix) {
-                    if (r.getListOfIngredients().contains(t)) {
+                    if (r.getListOfIngredients().contains(t) ||
+                            r.getCategoryOfRecipe().equals(t) ||
+                            r.getCountryStyle().equals(t)) {
                         evaluated.add(r);
                     }
                 }
             }
-
         } else {
             for (String t : postFix) {
                 if (t.equals("AND") || t.equals("OR") || t.equals("NOT")) {
+                    lastOperator = t;
                     while (!eval.isEmpty()) {
                         operands.add(eval.pop());
                     }
-                    evaluated.addAll(performOperation(t, operands));
+                    evaluated.addAll(performOperation(t, operands, evaluated));
                     operands = new ArrayList<>();
                 } else {
                     eval.push(t);
@@ -126,13 +129,34 @@ public class SearchEngine {
         return evaluated;
     }
 
-    private HashSet<Recipe> performOperation(String operator, ArrayList<String> operands) {
+    private HashSet<Recipe> performOperation(String operator, ArrayList<String> operands,
+                                             HashSet<Recipe> currentSearchResults) {
         HashSet<Recipe> result = new HashSet<>();
 
-        if (operator.equals("OR")) {
+
+        if (currentSearchResults != null &&
+                operands.size() == 1 &&
+                operator.equals("AND")) {
+            Iterator<Recipe> i = currentSearchResults.iterator();
+
+            while (i.hasNext()) {
+                Recipe r = i.next();
+                if (!r.getListOfIngredients().contains(operands.get(0)) &&
+                        !r.getCategoryOfRecipe().equals(operands.get(0)) &&
+                        !r.getCountryStyle().equals(operands.get(0))) {
+                    i.remove();
+                }
+            }
+
+            for (Recipe r : currentSearchResults) {
+
+            }
+        } else if (operator.equals("OR")) {
             for (Recipe r : recipes) {
                 for (String o : operands) {
-                    if (r.getListOfIngredients().contains(o)) {
+                    if (r.getListOfIngredients().contains(o) ||
+                            r.getCategoryOfRecipe().equals(o) ||
+                            r.getCountryStyle().equals(o)) {
                         result.add(r);
                         //s.incrementMatchCount();
                     }
@@ -142,7 +166,9 @@ public class SearchEngine {
             for (Recipe r : recipes) {
                 int matchCount = 0;
                 for (String o : operands) {
-                    if (r.getListOfIngredients().contains(o)) {
+                    if (r.getListOfIngredients().contains(o) ||
+                            r.getCategoryOfRecipe().equals(o) ||
+                            r.getCountryStyle().equals(o)) {
                         matchCount++;
                     }
                 }

@@ -72,6 +72,8 @@ public class SearchActivity extends AppCompatActivity {
         SearchEngine s = new SearchEngine(recipes, searchString);
         searchResults = s.getSearchResults();
 
+        s.printPostFix();
+
         for (Recipe r : searchResults) {
             searchResultNames.add(r.getName());
         }
