@@ -1,7 +1,11 @@
 package uottawa.ca.cookhelper;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.Stack;
 
 public class SearchEngine {
@@ -9,12 +13,14 @@ public class SearchEngine {
     String searchString;        // The user's input in string form
     ArrayList<String> tokens;
     ArrayList<String> postFix;
+    HashSet<Recipe> searchResults;
 
     public SearchEngine(ArrayList<Recipe> recipes, String searchString) {
         this.recipes = recipes;
         this.searchString = searchString;
         tokens = tokenize(searchString);
         postFix = toPostfix(tokens);
+        searchResults = evaluate();
     }
 
     private ArrayList<String> tokenize(String s) {
@@ -37,6 +43,21 @@ public class SearchEngine {
                 }
             }
         }
+
+
+        for (int i = 0; i < ret.size() - 1; i++) {
+            String curr = ret.get(i);
+            String next = ret.get(i + 1);
+
+            if (!(curr.equals("(") || curr.equals("AND") || curr.equals("OR"))) {
+                if (!(next.equals(")") ||next.equals("AND") || next.equals("OR"))) {
+                    curr = curr + " " + next;
+                    ret.add(i, curr);
+                    ret.remove(i + 1);
+                    ret.remove(i + 1);
+                }
+            }
+        }
         return ret;
     }
 
@@ -45,7 +66,7 @@ public class SearchEngine {
         ArrayList<String> output = new ArrayList<>();
 
         for (String t : arr) {
-            if (t.equals("AND") || t.equals("OR")) {
+            if (t.equals("AND") || t.equals("OR") || t.equals("NOT")) {
                 op.push(t);
             } else if (t.equals("(")) {
                 op.push(t);
@@ -61,11 +82,60 @@ public class SearchEngine {
         }
 
         for (String s : op) {
-            if (s.equals("AND") || s.equals("OR")) {
+            if (s.equals("AND") || s.equals("OR") || s.equals("NOT")) {
                 output.add(s);
             }
         }
         return output;
+    }
+
+    private HashSet<Recipe> evaluate() {
+        Stack<String> eval = new Stack<>();
+        ArrayList<String> operands = new ArrayList<>();
+
+        HashSet<Recipe> evaluated = new HashSet<>();
+
+        for (String t : postFix) {
+            if (t.equals("AND") || t.equals("OR") || t.equals("NOT")) {
+                while (!eval.isEmpty()) {
+                    operands.add(eval.pop());
+                }
+                evaluated.addAll(performOperation(t, operands));
+                operands = new ArrayList<>();
+            } else {
+                eval.push(t);
+            }
+        }
+        return evaluated;
+    }
+
+    private HashSet<Recipe> performOperation(String operator, ArrayList<String> operands) {
+        HashSet<Recipe> result = new HashSet<>();
+
+        if (operator.equals("OR")) {
+            for (Recipe r : recipes) {
+                for (String o : operands) {
+                    if (r.getListOfIngredients().contains(o)) {
+                        result.add(r);
+                        //s.incrementMatchCount();
+                    }
+                }
+            }
+        } else if (operator.equals("AND")) {
+            for (Recipe r : recipes) {
+                int matchCount = 0;
+                for (String o : operands) {
+                    if (r.getListOfIngredients().contains(o)) {
+                        matchCount++;
+                    }
+                }
+                if (matchCount == operands.size() && matchCount != 0) {
+                    result.add(r);
+                    //s.incrementMatchCount();
+                }
+            }
+        }
+        return result;
     }
 
     public void printTokens() {
@@ -77,6 +147,12 @@ public class SearchEngine {
     public void printPostFix() {
         for (String s : postFix) {
             System.out.println(s + " ");
+        }
+    }
+
+    public void printSearchResults() {
+        for (Recipe r : searchResults) {
+            System.out.println(r.getName());
         }
     }
 }
