@@ -18,22 +18,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    /**
+     * Action associated with the recipe list button.
+     * @param view the view
+     */
     protected void recipeListButtonAction(View view) {
         Intent i = new Intent(this, LibraryActivity.class);
         i.putExtra("recipeList", recipes);
         startActivityForResult(i, RECIPE_REQUEST);
     }
 
+    /**
+     * Action associated with the search recipes button.
+     * @param view the view
+     */
     protected void searchRecipesButtonAction(View view) {
         Intent i = new Intent(this, SearchActivity.class);
         i.putExtra("recipeList", recipes);
         startActivityForResult(i, RECIPE_REQUEST);
     }
 
+    /**
+     * Action associated with the instructions button.
+     * @param view the view
+     */
     protected void instructionsButtonAction(View view) {
         Intent i = new Intent(this, InstructionsActivity.class);
         startActivity(i);
     }
+
 
     /**
      * Used to pass the list of recipes back from the RecipeActivity so that
