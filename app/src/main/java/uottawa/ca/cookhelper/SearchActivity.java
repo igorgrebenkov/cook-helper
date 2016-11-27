@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
+/**
+ * The class SearchActivity is the activity used to  perform recipe searches.
+ * <p>
+ * It extends AppCompatActivity.
+ */
 public class SearchActivity extends AppCompatActivity {
     private ArrayList<Recipe> recipes;                   // The list of recipes
     private HashSet<Recipe> searchResults;               // HashSet of search results

@@ -6,6 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import java.util.ArrayList;
 
+/**
+ * The class MainActivity is the home screen for the app.
+ *
+ * It extends AppCompatActivity.
+ */
 public class MainActivity extends AppCompatActivity {
     private ArrayList<Recipe> recipes;            // List of recipes
     private final static int RECIPE_REQUEST = 0;  // Used to return recipes list from RecipeActivity

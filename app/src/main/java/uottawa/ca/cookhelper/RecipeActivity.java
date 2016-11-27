@@ -8,21 +8,25 @@ import android.text.InputType;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+
 import java.util.ArrayList;
 
+/**
+ * The class RecipeActivity is the page where recipes are displayed/edited.
+ * <p>
+ * It extends AppCompatActivity.
+ */
 public class RecipeActivity extends AppCompatActivity {
     private Recipe recipe;                      // The currently viewed recipe
     private ArrayList<Recipe> recipes;          // The list of recipes
     private int recipePosition;                 // The position of the current recipe
-    private CustomEditText nameView;                  // The TextView for the recipe's name
-    private CustomEditText countryView;               // The TextView for the recipe's country
-    private CustomEditText categoryView;              // The TextView for the recipe's category
-    private CustomEditText cookTimeView;              // The TextView for the recipe's cooking time
-    private CustomEditText servingSizeView;           // The TextView for the recipe's serving size
-    private CustomEditText ingredientsView;           // The TextView for the recipe's ingredients
-    private CustomEditText instructionsView;          // The TextView for the recipe's instructions
+    private CustomEditText nameView;            // The TextView for the recipe's name
+    private CustomEditText countryView;         // The TextView for the recipe's country
+    private CustomEditText categoryView;        // The TextView for the recipe's category
+    private CustomEditText cookTimeView;        // The TextView for the recipe's cooking time
+    private CustomEditText servingSizeView;     // The TextView for the recipe's serving size
+    private CustomEditText ingredientsView;     // The TextView for the recipe's ingredients
+    private CustomEditText instructionsView;    // The TextView for the recipe's instructions
     private final static int INPUT_NONE = 0;    // Default input type for TextViews (uneditable)
 
     @Override
@@ -53,6 +57,7 @@ public class RecipeActivity extends AppCompatActivity {
     /**
      * Action associated with the OK button.
      * Update the Recipe's model with the user's edits and hides the keyboard.
+     *
      * @param view the view
      */
     protected void okButtonAction(View view) {
@@ -73,6 +78,7 @@ public class RecipeActivity extends AppCompatActivity {
     /**
      * Action associated with the edit button.
      * Makes the text fields editable.
+     *
      * @param view the view
      */
     protected void editButtonAction(View view) {

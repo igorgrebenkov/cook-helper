@@ -1,23 +1,31 @@
 package uottawa.ca.cookhelper;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Stack;
 
-public class SearchEngine {
+/**
+ * The class SearchEngine generates a list of recipe search results based
+ * on the user's boolean search string.
+ * <p>
+ * Results are sorted by number of matching search terms (relevance) in decreasing order.
+ * If two results have the same relevance, they are sorted in alphabetical order.
+ */
+class SearchEngine {
     private ArrayList<Recipe> recipes;              // The list of recipes
     private ArrayList<String> tokens;               // The list of tokens
     private ArrayList<String> postFix;              // The list of tokens in postfix notation
     private HashSet<Recipe> searchResults;          // The set of search results
     private ArrayList<Recipe> sortedSearchResults;  // The sorted list of search results
 
-    public SearchEngine(ArrayList<Recipe> recipes, String searchString) {
+    /**
+     * Constructor.
+     *
+     * @param recipes      the list of recipes
+     * @param searchString the user's search string
+     */
+    SearchEngine(ArrayList<Recipe> recipes, String searchString) {
         this.recipes = recipes;
         tokens = tokenize(searchString);
         postFix = toPostfix(tokens);
@@ -32,7 +40,7 @@ public class SearchEngine {
      *
      * @return the set of search results
      */
-    public HashSet<Recipe> getSearchResults() {
+    HashSet<Recipe> getSearchResults() {
         return searchResults;
     }
 
@@ -41,7 +49,7 @@ public class SearchEngine {
      *
      * @return the sorted search results
      */
-    public ArrayList<Recipe> getSortedSearchResults() {
+    ArrayList<Recipe> getSortedSearchResults() {
         return sortedSearchResults;
     }
 

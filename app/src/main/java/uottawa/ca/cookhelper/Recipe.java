@@ -1,8 +1,15 @@
 package uottawa.ca.cookhelper;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
+/**
+ * The class Recipe is the model of the app.
+ * <p>
+ * It holds various attributes belonging to a recipe.
+ * <p>
+ * It implements Serializable so the list of recipes may be passed between activities.
+ * It implements Comparable so a list of recipes may be sorted.
+ */
 public class Recipe implements Serializable, Comparable<Recipe> {
     private String name;                // Recipe name
     private String countryStyle;        // Recipe country of origin
@@ -29,13 +36,14 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * All-argument constructor.
-     * @param name the recipe name
-     * @param countryStyle the recipe's country of origin
-     * @param categoryOfRecipe the recipe's category
-     * @param timeToCook the recipe's cooking time
-     * @param servingSize the recipe's serving size
+     *
+     * @param name              the recipe name
+     * @param countryStyle      the recipe's country of origin
+     * @param categoryOfRecipe  the recipe's category
+     * @param timeToCook        the recipe's cooking time
+     * @param servingSize       the recipe's serving size
      * @param listOfIngredients the recipe's list of ingredients
-     * @param instructions the recipe's list of instructions
+     * @param instructions      the recipe's list of instructions
      */
     public Recipe(String name, String countryStyle, String categoryOfRecipe,
                   int timeToCook, int servingSize, String listOfIngredients, String instructions) {
@@ -51,6 +59,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Getter for the Recipe's name.
+     *
      * @return the Recipe's name
      */
     public String getName() {
@@ -59,6 +68,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Setter for the Recipe's name.
+     *
      * @param name the Recipe's name
      */
     public void setName(String name) {
@@ -67,6 +77,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Getter for the Recipe's country of origin.
+     *
      * @return the Recipe's country of origin
      */
     public String getCountryStyle() {
@@ -75,6 +86,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Setter for the Recipe's country of origin.
+     *
      * @param countryStyle the Recipe's country of origin
      */
     public void setCountryStyle(String countryStyle) {
@@ -83,6 +95,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Getter for the Recipe's category.
+     *
      * @return the Recipe's category
      */
     public String getCategoryOfRecipe() {
@@ -91,6 +104,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Setter for the Recipe's category.
+     *
      * @param categoryOfRecipe the Recipe's category
      */
     public void setCategoryOfRecipe(String categoryOfRecipe) {
@@ -99,6 +113,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Getter for the Recipe's cooking time.
+     *
      * @return the Recipe's cooking time.
      */
     public int getTimeToCook() {
@@ -107,6 +122,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Setter for the Recipe's cooking time.
+     *
      * @param timeToCook the Recipe's cooking time
      */
     public void setTimeToCook(int timeToCook) {
@@ -115,6 +131,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Getter for the Recipe's serving size.
+     *
      * @return the Recipe's serving size.
      */
     public int getServingSize() {
@@ -123,6 +140,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Setter for the Recipe's serving size.
+     *
      * @param servingSize the Recipe's serving size.
      */
     public void setServingSize(int servingSize) {
@@ -131,6 +149,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Getter for the Recipe's list of ingredients.
+     *
      * @return the Recipe's list of ingredients
      */
     public String getListOfIngredients() {
@@ -139,6 +158,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Setter for the Recipe's list of ingredients.
+     *
      * @param listOfIngredients the Recipe's list of ingredients
      */
     public void setListOfIngredients(String listOfIngredients) {
@@ -147,6 +167,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Getter for the Recipe's list of instructions.
+     *
      * @return the Recipe's list of instructions
      */
     public String getInstructions() {
@@ -155,6 +176,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Setter for the Recipe's list of instructions.
+     *
      * @param instructions the Recipe's list of instructions
      */
     public void setInstructions(String instructions) {
@@ -163,6 +185,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     /**
      * Getter for the matchCount.
+     *
      * @return the matchCount
      */
     public int getMatchCount() {
@@ -186,6 +209,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
     /**
      * Returns comparison of matchCount if not equal to zero.
      * Else, returns comparison of Name strings.
+     *
      * @param r the recipe we are comparing with
      * @return the result of the comparison
      */

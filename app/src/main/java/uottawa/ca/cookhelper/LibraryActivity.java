@@ -14,6 +14,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
+/**
+ * The class LibraryActivity is the screen where users may view the list of recipes.
+ * Recipes are sorted in alphabetical order.
+ * <p>
+ * It extends AppCompatActivity.
+ */
 public class LibraryActivity extends AppCompatActivity {
 
     private ArrayList<Recipe> recipes;                  // List of recipes
