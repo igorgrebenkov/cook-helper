@@ -30,6 +30,18 @@
             android:id="@+id/searchBtn"
             android:onClick="searchRecipesButtonAction" />
 
+        <Button
+            android:text="@string/instructionsBtnTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/instructionsBtn" />
+
+        <Button
+            android:text="@string/aboutBtnTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/aboutBtn" />
+
     </LinearLayout>
 
 </RelativeLayout>

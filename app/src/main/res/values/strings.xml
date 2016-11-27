@@ -13,4 +13,6 @@
     <string name="recipeListBtnTxt">Recipe List</string>
     <string name="goSearchBtnTxt">Search</string>
     <string name="addBtnTxt">Add</string>
+    <string name="instructionsBtnTxt">Instructions</string>
+    <string name="aboutBtnTxt">About</string>
 </resources>
