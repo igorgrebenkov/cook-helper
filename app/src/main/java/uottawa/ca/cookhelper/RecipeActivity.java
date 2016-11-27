@@ -61,7 +61,7 @@ public class RecipeActivity extends AppCompatActivity {
         recipe.setName(nameView.getText().toString());
         recipe.setCountryStyle(countryView.getText().toString());
         recipe.setCategoryOfRecipe(categoryView.getText().toString());
-        recipe.setTimetoCook(Integer.parseInt(cookTimeView.getText().toString()));
+        recipe.setTimeToCook(Integer.parseInt(cookTimeView.getText().toString()));
         recipe.setServingSize(Integer.parseInt(servingSizeView.getText().toString()));
         recipe.setListOfIngredients(ingredientsView.getText().toString());
         recipe.setInstructions(instructionsView.getText().toString());
@@ -119,7 +119,7 @@ public class RecipeActivity extends AppCompatActivity {
         categoryView.setBackgroundColor(0);
 
         cookTimeView = (EditText) findViewById(R.id.cookTimeView);
-        cookTimeView.setText(Integer.toString(recipe.getTimetoCook()));
+        cookTimeView.setText(Integer.toString(recipe.getTimeToCook()));
         cookTimeView.setInputType(INPUT_NONE);
         cookTimeView.setBackgroundColor(0);
 
