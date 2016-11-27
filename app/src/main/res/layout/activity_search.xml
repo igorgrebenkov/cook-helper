@@ -22,7 +22,8 @@
             android:ems="10"
             android:id="@+id/searchText"
             android:hint="Enter a search query..."
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textSize="14spTe" />
 
         <Button
             android:text="@string/goSearchBtnTxt"
