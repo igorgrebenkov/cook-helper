@@ -1,5 +1,10 @@
 package uottawa.ca.cookhelper;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -11,9 +16,11 @@ public class SearchEngine {
     private ArrayList<String> postFix;              // The list of tokens in postfix notation
     private HashSet<Recipe> searchResults;          // The set of search results
     private ArrayList<Recipe> sortedSearchResults;  // The sorted list of search results
+    private Context context;                        // Used for invalid input dialog
 
-    public SearchEngine(ArrayList<Recipe> recipes, String searchString) {
+    public SearchEngine(ArrayList<Recipe> recipes, String searchString, Context context) {
         this.recipes = recipes;
+        this.context = context;
         tokens = tokenize(searchString);
         postFix = toPostfix(tokens);
         searchResults = evaluate();
@@ -33,6 +40,7 @@ public class SearchEngine {
 
     /**
      * Getter for search results sorted by match count.
+     *
      * @return the sorted search results
      */
     public ArrayList<Recipe> getSortedSearchResults() {
@@ -73,21 +81,74 @@ public class SearchEngine {
                 }
             }
         }
-
-        // Add remaining token if it exists
+        // Add any remaining tokens
         if (!token.equals("")) {
             ret.add(token);
         }
 
+        // Add parentheses tokens enclosing search terms with a NOT operator
+        // Needed to ensure proper operator precedence, and takes responsibility off the user
+        insertParenthesesForNOT(ret);
+        // Concatenate separate tokens that comprise one search term into one token
+        // (e.g. search term ice cream will result in token 'ice' and token 'cream'
+        // Replace them with one token 'ice cream'
+        concatenateMultiWordTokens(ret);
+
+        return ret;
+    }
+
+    /**
+     * Inserts parentheses around tokens with the NOT operator.
+     * e.g., NOT Tomatoes becomes (NOT Tomatoes)
+     * <p>
+     * For search results to work correctly, NOT terms must be enclosed
+     * in parentheses to ensure proper order of precedence when converting
+     * the search token list to postfix.
+     * <p>
+     * This method does it automatically so the user doesn't have to worry about it.
+     *
+     * @param tokens the list of tokens
+     */
+    private void insertParenthesesForNOT(ArrayList<String> tokens) {
+        boolean haveNot = false;
+        for (int i = 0; i < tokens.size(); i++) {
+            String t = tokens.get(i);
+            if (t.equals("NOT")) {
+                tokens.add(i, "(");
+                i++;
+                haveNot = true;
+            }
+            if (haveNot) {
+                if (t.equals("AND") || t.equals("OR")) {
+                    tokens.add(i, ")");
+                    haveNot = false;
+                } else if (i == tokens.size() - 1) {
+                    tokens.add(i + 1, ")");
+                    haveNot = false;
+                }
+
+            }
+        }
+    }
+
+    /**
+     * Concatenates multi word tokens into a single token.
+     * <p>
+     * When searching for ingredients, we may want a token
+     * that is longer than one word. e.g., "ice cream"
+     *
+     * @param tokens the list of tokens
+     */
+    private void concatenateMultiWordTokens(ArrayList<String> tokens) {
         // When searching for ingredients, we may want a token
         // that is longer than one word. e.g., "ice cream".
         //
         // This section iterates through the tokens and checks if the
         // token following it  in the list is an operator. If it is not, the current and
         // next string are concatenated with a space and added to the token list.
-        for (int i = 0; i < ret.size() - 1; i++) {
-            String curr = ret.get(i);
-            String next = ret.get(i + 1);
+        for (int i = 0; i < tokens.size() - 1; i++) {
+            String curr = tokens.get(i);
+            String next = tokens.get(i + 1);
             if (!(curr.equals("(") ||
                     curr.equals("AND") ||
                     curr.equals("OR") ||
@@ -97,18 +158,18 @@ public class SearchEngine {
                         next.equals("OR") ||
                         next.equals("NOT"))) {
                     curr = curr + " " + next;
-                    ret.add(i, curr);
-                    ret.remove(i + 1);
-                    ret.remove(i + 1);
+                    tokens.add(i, curr);
+                    tokens.remove(i + 1);
+                    tokens.remove(i + 1);
                 }
             }
         }
-        return ret;
     }
 
     /**
      * Converts a list of tokens in infix notation to a
      * list of tokens in postfix notation.
+     *
      * @param arr the list of tokens in infix notation
      * @return the list of tokens in postfix notation
      */
@@ -156,6 +217,7 @@ public class SearchEngine {
      * Evaluates a boolean expression in postfix notation from a list of tokens.
      * The result is a HashSet of recipes that comprise the search results.
      * A HashSet was used primarily because it avoids adding duplicate entries.
+     *
      * @return the HashSet of search results
      */
     private HashSet<Recipe> evaluate() {
@@ -186,7 +248,7 @@ public class SearchEngine {
                     }
                     evaluated.addAll(performOperation(t, operands));
                     operands = new ArrayList<>();
-                } else if (t.equals("NOT")){
+                } else if (t.equals("NOT")) {
                     operands.add(toEvaluate.pop()); // Only want the last operand for NOT
                     evaluated.addAll(performOperation(t, operands));
                     operands = new ArrayList<>();
@@ -200,6 +262,7 @@ public class SearchEngine {
 
     /**
      * Performs a boolean operation consisting of one operator and a set of operands.
+     *
      * @param operator the operator
      * @param operands the operands
      * @return
@@ -243,6 +306,20 @@ public class SearchEngine {
                 break;
         }
         return result;
+    }
+
+    private void displayBadInputAlert() {
+        System.out.println("TEST");
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(false);
+        builder.setTitle("ERROR: Invalid input.");
+        builder.setMessage("Please check your input for mis-matched parenthes or other errors.");
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
     }
 
     public void printTokens() {

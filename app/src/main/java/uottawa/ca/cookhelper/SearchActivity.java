@@ -15,9 +15,9 @@ import java.util.HashSet;
 
 public class SearchActivity extends AppCompatActivity {
     private ArrayList<Recipe> recipes;                   // The list of recipes
-    private ArrayList<String> searchResultNames;         // List of recipe names in search results
     private HashSet<Recipe> searchResults;               // HashSet of search results
     private ArrayList<Recipe> sortedSearchResults;       // List of search results sorted by rank
+    private ArrayList<String> searchResultNames;         // List of recipe names in search results
     private ListView searchResultView;                   // ListView for Recipes
     private ArrayAdapter<String> noSelectionList;        // Adapter w/ no list selection
     private final static int SEARCH_RECIPE_REQUEST = 1;  // For returning data from RecipeActivity
@@ -81,9 +81,12 @@ public class SearchActivity extends AppCompatActivity {
 
         TextView searchView = (TextView) findViewById(R.id.searchText);
         String searchString = searchView.getText().toString();
-        SearchEngine s = new SearchEngine(recipes, searchString);
+        SearchEngine s = new SearchEngine(recipes, searchString, SearchActivity.this);
         searchResults = s.getSearchResults();
         sortedSearchResults = s.getSortedSearchResults();
+
+        s.printPostFix();
+        System.out.println();
 
         // Update ListView contents
         refreshSearchResultNames();
