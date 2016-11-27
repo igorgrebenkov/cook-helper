@@ -80,8 +80,8 @@
                             android:textStyle="bold"
                             android:textAppearance="@android:style/TextAppearance"
                             android:layout_column="0" />
-                        <EditText
-                            android:layout_width="wrap_content"
+                        <uottawa.ca.cookhelper.CustomEditText
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/nameView"
                             android:inputType="none"
@@ -111,8 +111,8 @@
                             android:textStyle="bold"
                             android:textAppearance="@android:style/TextAppearance"/>
 
-                        <EditText
-                            android:layout_width="wrap_content"
+                        <uottawa.ca.cookhelper.CustomEditText
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/countryView"
                             android:inputType="none"
@@ -141,8 +141,8 @@
                             android:textStyle="bold"
                             android:textAppearance="@android:style/TextAppearance"/>
 
-                        <EditText
-                            android:layout_width="wrap_content"
+                        <uottawa.ca.cookhelper.CustomEditText
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/categoryView"
                             android:inputType="none"
@@ -172,8 +172,8 @@
                             android:textStyle="bold"
                             android:textAppearance="@android:style/TextAppearance" />
 
-                        <EditText
-                            android:layout_width="wrap_content"
+                        <uottawa.ca.cookhelper.CustomEditText
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/cookTimeView"
                             android:inputType="none"
@@ -201,8 +201,8 @@
                             android:textStyle="bold"
                             android:textAppearance="@android:style/TextAppearance"/>
 
-                        <EditText
-                            android:layout_width="wrap_content"
+                        <uottawa.ca.cookhelper.CustomEditText
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/servingSizeView"
                             android:inputType="none"
@@ -230,8 +230,8 @@
                             android:textStyle="bold"
                             android:textAppearance="@android:style/TextAppearance"/>
 
-                        <EditText
-                            android:layout_width="wrap_content"
+                        <uottawa.ca.cookhelper.CustomEditText
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/ingredientsView"
                             android:inputType="none"
@@ -239,7 +239,7 @@
                             android:layout_column="1"
                             android:paddingLeft="5sp"
                             android:textColor= "@drawable/edit_text_color"
-                            android:hint="1. ingredient\n 2. ingredient"
+                            android:hint="1. ingredient\n2. ingredient"
                             />
                     </TableRow>
 
@@ -282,14 +282,14 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true">
 
-                    <EditText
-                        android:layout_width="wrap_content"
+                    <uottawa.ca.cookhelper.CustomEditText
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/instructionsView"
                         android:inputType="none"
                         android:textAppearance="@android:style/TextAppearance"
                         android:textColor= "@drawable/edit_text_color"
-                        android:hint="1. instruction\n 2. instruction"
+                        android:hint="1. instruction\n2. instruction"
                         />
                 </LinearLayout>
             </LinearLayout>

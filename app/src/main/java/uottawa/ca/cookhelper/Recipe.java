@@ -17,16 +17,13 @@ public class Recipe implements Serializable, Comparable<Recipe> {
      * No argument constructor (used for adding a recipe).
      */
     public Recipe() {
-        char[] chars = new char[40];
-        Arrays.fill(chars, ' ');
-        String s = new String(chars);
-        name = s;
-        countryStyle = s;
-        categoryOfRecipe = s;
+        name = "";
+        countryStyle = "";
+        categoryOfRecipe = "";
         timeToCook = 0;
         servingSize = 0;
-        listOfIngredients = s;
-        instructions = s;
+        listOfIngredients = "";
+        instructions = "";
         matchCount = 0;
     }
 

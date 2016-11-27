@@ -16,13 +16,13 @@ public class RecipeActivity extends AppCompatActivity {
     private Recipe recipe;                      // The currently viewed recipe
     private ArrayList<Recipe> recipes;          // The list of recipes
     private int recipePosition;                 // The position of the current recipe
-    private TextView nameView;                  // The TextView for the recipe's name
-    private TextView countryView;               // The TextView for the recipe's country
-    private TextView categoryView;              // The TextView for the recipe's category
-    private TextView cookTimeView;              // The TextView for the recipe's cooking time
-    private TextView servingSizeView;           // The TextView for the recipe's serving size
-    private TextView ingredientsView;           // The TextView for the recipe's ingredients
-    private TextView instructionsView;          // The TextView for the recipe's instructions
+    private CustomEditText nameView;                  // The TextView for the recipe's name
+    private CustomEditText countryView;               // The TextView for the recipe's country
+    private CustomEditText categoryView;              // The TextView for the recipe's category
+    private CustomEditText cookTimeView;              // The TextView for the recipe's cooking time
+    private CustomEditText servingSizeView;           // The TextView for the recipe's serving size
+    private CustomEditText ingredientsView;           // The TextView for the recipe's ingredients
+    private CustomEditText instructionsView;          // The TextView for the recipe's instructions
     private final static int INPUT_NONE = 0;    // Default input type for TextViews (uneditable)
 
     @Override
@@ -77,6 +77,7 @@ public class RecipeActivity extends AppCompatActivity {
      */
     protected void editButtonAction(View view) {
         nameView.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+        nameView.setSelection(0);
         countryView.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
         categoryView.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
         cookTimeView.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -103,36 +104,36 @@ public class RecipeActivity extends AppCompatActivity {
      * Updates the text views with the Recipe model.
      */
     protected void updateTextViews() {
-        nameView = (EditText) findViewById(R.id.nameView);
+        nameView = (CustomEditText) findViewById(R.id.nameView);
         nameView.setText(recipe.getName());
         nameView.setInputType(INPUT_NONE);
         nameView.setBackgroundColor(0);
 
-        countryView = (EditText) findViewById(R.id.countryView);
+        countryView = (CustomEditText) findViewById(R.id.countryView);
         countryView.setText(recipe.getCountryStyle());
         countryView.setInputType(INPUT_NONE);
         countryView.setBackgroundColor(0);
 
-        categoryView = (EditText) findViewById(R.id.categoryView);
+        categoryView = (CustomEditText) findViewById(R.id.categoryView);
         categoryView.setText(recipe.getCategoryOfRecipe());
         categoryView.setInputType(INPUT_NONE);
         categoryView.setBackgroundColor(0);
 
-        cookTimeView = (EditText) findViewById(R.id.cookTimeView);
+        cookTimeView = (CustomEditText) findViewById(R.id.cookTimeView);
         cookTimeView.setText(Integer.toString(recipe.getTimeToCook()));
         cookTimeView.setInputType(INPUT_NONE);
         cookTimeView.setBackgroundColor(0);
 
-        servingSizeView = (EditText) findViewById(R.id.servingSizeView);
+        servingSizeView = (CustomEditText) findViewById(R.id.servingSizeView);
         servingSizeView.setText(Integer.toString(recipe.getServingSize()));
         servingSizeView.setBackgroundColor(0);
 
-        ingredientsView = (EditText) findViewById(R.id.ingredientsView);
+        ingredientsView = (CustomEditText) findViewById(R.id.ingredientsView);
         ingredientsView.setText(recipe.getListOfIngredients().replace("\\n", "\n"));
         ingredientsView.setEnabled(false);
         ingredientsView.setBackgroundColor(0);
 
-        instructionsView = (EditText) findViewById(R.id.instructionsView);
+        instructionsView = (CustomEditText) findViewById(R.id.instructionsView);
         instructionsView.setText(recipe.getInstructions().replace("\\n", "\n"));
         instructionsView.setEnabled(false);
         instructionsView.setBackgroundColor(0);
