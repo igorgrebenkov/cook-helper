@@ -213,66 +213,50 @@ public class SearchEngine {
     private HashSet<Recipe> performOperation(String operator, ArrayList<String> operands,
                                              HashSet<Recipe> currentSearchResults) {
         HashSet<Recipe> result = new HashSet<>();
-
-        if (currentSearchResults != null &&  // Case where last operation is an AND
-                operands.size() == 1 &&       // e.g. (Tomatoes OR Garlic) AND Bagel
-                operator.equals("AND")) {
-
-            // We may have some search results that met the search criteria up to this
-            // last AND operation, but that now have to be removed if they don't have
-            // a match for the last search term
-            Iterator<Recipe> i = currentSearchResults.iterator();
-
-            // Check if the results contain the last search term entered by the user
-            while (i.hasNext()) {
-                Recipe r = i.next();
-                if (!r.getListOfIngredients().contains(operands.get(0)) &&
-                        !r.getCategoryOfRecipe().equals(operands.get(0)) &&
-                        !r.getCountryStyle().equals(operands.get(0))) {
-                    r.decrementMatchCount();
-                    i.remove();
+        switch (operator) {
+            case "OR":
+                for (Recipe r : recipes) {
+                    for (String o : operands) {
+                        if (r.getListOfIngredients().contains(o) ||
+                                r.getCategoryOfRecipe().equals(o) ||
+                                r.getCountryStyle().equals(o)) {
+                            result.add(r);
+                            r.incrementMatchCount();
+                        }
+                    }
                 }
-            }
-        } else if (operator.equals("OR")) {
-            for (Recipe r : recipes) {
-                for (String o : operands) {
-                    if (r.getListOfIngredients().contains(o) ||
-                            r.getCategoryOfRecipe().equals(o) ||
-                            r.getCountryStyle().equals(o)) {
+                break;
+            case "AND":
+                for (Recipe r : recipes) {
+                    int matchCount = 0;
+                    for (String o : operands) {
+                        // matchCount is incremented each time a token matches
+                        //   - used later to check if every token was found in the recipe
+                        if (r.getListOfIngredients().contains(o) ||
+                                r.getCategoryOfRecipe().equals(o) ||
+                                r.getCountryStyle().equals(o)) {
+                            matchCount++;
+                            r.incrementMatchCount();
+                        }
+                    }
+                    // Add if all tokens found in the recipe
+                    if (matchCount == operands.size() && matchCount != 0) {
                         result.add(r);
-                        r.incrementMatchCount();
                     }
                 }
-            }
-        } else if (operator.equals("AND")) {
-            for (Recipe r : recipes) {
-                int matchCount = 0;
-                for (String o : operands) {
-                    // matchCount is incremented each time a token matches
-                    //   - used later to check if every token was found in the recipe
-                    if (r.getListOfIngredients().contains(o) ||
-                            r.getCategoryOfRecipe().equals(o) ||
-                            r.getCountryStyle().equals(o)) {
-                        matchCount++;
-                        r.incrementMatchCount();
+                break;
+            case "NOT":
+                for (Recipe r : recipes) {
+                    for (String o : operands) {
+                        if (!r.getListOfIngredients().contains(o) &&
+                                !r.getCategoryOfRecipe().equals(o) &&
+                                !r.getCountryStyle().equals(o)) {
+                            result.add(r);
+                            r.incrementMatchCount();
+                        }
                     }
                 }
-                // Add if all tokens found in the recipe
-                if (matchCount == operands.size() && matchCount != 0) {
-                    result.add(r);
-                }
-            }
-        } else if (operator.equals("NOT")) {
-            for (Recipe r : recipes) {
-                for (String o : operands) {
-                    if (!r.getListOfIngredients().contains(o) &&
-                            !r.getCategoryOfRecipe().equals(o) &&
-                            !r.getCountryStyle().equals(o)) {
-                        result.add(r);
-                        r.incrementMatchCount();
-                    }
-                }
-            }
+                break;
         }
         return result;
     }
