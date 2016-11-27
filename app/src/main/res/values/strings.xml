@@ -1,15 +1,11 @@
 <resources>
     <string name="app_name">CookHelper</string>
     <string name="searchBtnTxt">Search Recipes</string>
-    <string name="browseAddBtnTxt">Browse/Add Recipe</string>
     <string name="deleteBtnTxt">Delete</string>
     <string name="editBtnTxt">Edit</string>
     <string name="cancelBtnTxt">Cancel</string>
-    <string name="nameLabelTxt">Name:</string>
     <string name="editRecipeTxt">Edit</string>
     <string name="okBtnTxt">OK</string>
-    <string name="cancelRecipeBtnTxt">Cancel</string>
-    <string name="minutesTxt">min.</string>
     <string name="recipeListBtnTxt">Recipe List</string>
     <string name="goSearchBtnTxt">Search</string>
     <string name="addBtnTxt">Add</string>
