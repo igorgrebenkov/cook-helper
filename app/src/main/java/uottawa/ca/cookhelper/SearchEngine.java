@@ -1,20 +1,16 @@
 package uottawa.ca.cookhelper;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.PriorityQueue;
-import java.util.Set;
 import java.util.Stack;
 
 public class SearchEngine {
-    private ArrayList<Recipe> recipes;          // The list of recipes
-    private ArrayList<String> tokens;           // The list of tokens
-    private ArrayList<String> postFix;          // The list of tokens in postfix notation
-    private HashSet<Recipe> searchResults;      // The set of search results
-    private ArrayList<Recipe> sortedSearchResults;
+    private ArrayList<Recipe> recipes;              // The list of recipes
+    private ArrayList<String> tokens;               // The list of tokens
+    private ArrayList<String> postFix;              // The list of tokens in postfix notation
+    private HashSet<Recipe> searchResults;          // The set of search results
+    private ArrayList<Recipe> sortedSearchResults;  // The sorted list of search results
 
     public SearchEngine(ArrayList<Recipe> recipes, String searchString) {
         this.recipes = recipes;
@@ -189,11 +185,11 @@ public class SearchEngine {
                     while (!toEvaluate.isEmpty()) {
                         operands.add(toEvaluate.pop());
                     }
-                    evaluated.addAll(performOperation(t, operands, evaluated));
+                    evaluated.addAll(performOperation(t, operands));
                     operands = new ArrayList<>();
                 } else if (t.equals("NOT")){
-                    operands.add(toEvaluate.pop());
-                    evaluated.addAll(performOperation(t, operands, evaluated));
+                    operands.add(toEvaluate.pop()); // Only want the last operand for NOT
+                    evaluated.addAll(performOperation(t, operands));
                     operands = new ArrayList<>();
                 } else {
                     toEvaluate.push(t);
@@ -207,21 +203,19 @@ public class SearchEngine {
      * Performs a boolean operation consisting of one operator and a set of operands.
      * @param operator the operator
      * @param operands the operands
-     * @param currentSearchResults the current list of recipes in the search results
      * @return
      */
-    private HashSet<Recipe> performOperation(String operator, ArrayList<String> operands,
-                                             HashSet<Recipe> currentSearchResults) {
+    private HashSet<Recipe> performOperation(String operator, ArrayList<String> operands) {
         HashSet<Recipe> result = new HashSet<>();
         switch (operator) {
-            // Since matches are sorted by rank, AND and OR operations have the same
-            // code: we check if there's a match, and increment that recipe's matchCount
+            // Since matches are sorted by rank, AND and OR operations have the same code:
+            // we check if there's a match, and increment that recipe's matchCount if there is
             //
             // Say we have recipeA that has tomatoes and onions
             // and we have recipeB that has tomatoes only
             // (Tomatoes AND Onions) would rank recipeA as the best choice
             // (Tomatoes OR Onions) would also rank recipeA as the best choice,
-            //  since it has more matches.
+            //  since it has more matches in either case.
             // The operator really makes no difference with AND/OR to get the correct ranking.
             case "AND":
             case "OR":
