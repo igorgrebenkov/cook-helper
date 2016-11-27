@@ -88,7 +88,7 @@ public class SearchEngine {
         // that is longer than one word. e.g., "ice cream".
         //
         // This section iterates through the tokens and checks if the
-        // token following it  in the liss is an operator. If it is not, the current and
+        // token following it  in the list is an operator. If it is not, the current and
         // next string are concatenated with a space and added to the token list.
         for (int i = 0; i < ret.size() - 1; i++) {
             String curr = ret.get(i);
@@ -214,34 +214,25 @@ public class SearchEngine {
                                              HashSet<Recipe> currentSearchResults) {
         HashSet<Recipe> result = new HashSet<>();
         switch (operator) {
+            // Since matches are sorted by rank, AND and OR operations have the same
+            // code: we check if there's a match, and increment that recipe's matchCount
+            //
+            // Say we have recipeA that has tomatoes and onions
+            // and we have recipeB that has tomatoes only
+            // (Tomatoes AND Onions) would rank recipeA as the best choice
+            // (Tomatoes OR Onions) would also rank recipeA as the best choice,
+            //  since it has more matches.
+            // The operator really makes no difference with AND/OR to get the correct ranking.
+            case "AND":
             case "OR":
                 for (Recipe r : recipes) {
                     for (String o : operands) {
                         if (r.getListOfIngredients().contains(o) ||
                                 r.getCategoryOfRecipe().equals(o) ||
                                 r.getCountryStyle().equals(o)) {
+                            r.incrementMatchCount();
                             result.add(r);
-                            r.incrementMatchCount();
                         }
-                    }
-                }
-                break;
-            case "AND":
-                for (Recipe r : recipes) {
-                    int matchCount = 0;
-                    for (String o : operands) {
-                        // matchCount is incremented each time a token matches
-                        //   - used later to check if every token was found in the recipe
-                        if (r.getListOfIngredients().contains(o) ||
-                                r.getCategoryOfRecipe().equals(o) ||
-                                r.getCountryStyle().equals(o)) {
-                            matchCount++;
-                            r.incrementMatchCount();
-                        }
-                    }
-                    // Add if all tokens found in the recipe
-                    if (matchCount == operands.size() && matchCount != 0) {
-                        result.add(r);
                     }
                 }
                 break;
@@ -251,8 +242,8 @@ public class SearchEngine {
                         if (!r.getListOfIngredients().contains(o) &&
                                 !r.getCategoryOfRecipe().equals(o) &&
                                 !r.getCountryStyle().equals(o)) {
-                            result.add(r);
                             r.incrementMatchCount();
+                            result.add(r);
                         }
                     }
                 }

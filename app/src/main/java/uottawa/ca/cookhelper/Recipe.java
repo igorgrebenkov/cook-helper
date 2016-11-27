@@ -180,13 +180,6 @@ public class Recipe implements Serializable, Comparable<Recipe> {
     }
 
     /**
-     * Decrements the matchCount.
-     */
-    public void decrementMatchCount() {
-        matchCount--;
-    }
-
-    /**
      * Resets the matchCount to 0.
      */
     public void resetMatchCount() {
@@ -202,7 +195,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
     @Override
     public int compareTo(Recipe r) {
         int matchCountCompare = this.getMatchCount() - r.getMatchCount();
-        int nameCompare = this.getName().compareTo(r.getName());
+        int nameCompare = r.getName().compareTo(this.getName());
 
         // If
         if (matchCountCompare != 0) {

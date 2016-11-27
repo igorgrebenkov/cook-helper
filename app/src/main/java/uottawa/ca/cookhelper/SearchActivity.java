@@ -90,11 +90,6 @@ public class SearchActivity extends AppCompatActivity {
         // Update ListView contents
         refreshSearchResultNames();
         refreshListView();
-
-        //!!!!!!!!!!!!!!!!!!!!!!!! REMOVE LATER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        for (Recipe r : sortedSearchResults) {
-            System.out.println(r.getName() + ": " + r.getMatchCount());
-        }
     }
 
     /**
@@ -135,14 +130,6 @@ public class SearchActivity extends AppCompatActivity {
         // Update ListView contents
         refreshSearchResultNames();
         refreshListView();
-
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REMOVE LATER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        for (Recipe r : sortedSearchResults) {
-            System.out.println("Fuck");
-            System.out.println(r.getName() + ": " + r.getMatchCount());
-        }
-
     }
 
     /**
