@@ -10,10 +10,10 @@ import java.util.Set;
 import java.util.Stack;
 
 public class SearchEngine {
-    private ArrayList<Recipe> recipes;      // The list of recipes
-    private ArrayList<String> tokens;       // The list of tokens
-    private ArrayList<String> postFix;     // The list of tokens in postfix notation
-    private HashSet<Recipe> searchResults; // The set of search results
+    private ArrayList<Recipe> recipes;          // The list of recipes
+    private ArrayList<String> tokens;           // The list of tokens
+    private ArrayList<String> postFix;          // The list of tokens in postfix notation
+    private HashSet<Recipe> searchResults;      // The set of search results
     private ArrayList<Recipe> sortedSearchResults;
 
     public SearchEngine(ArrayList<Recipe> recipes, String searchString) {

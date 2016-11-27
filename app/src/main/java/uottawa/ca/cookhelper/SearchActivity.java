@@ -45,7 +45,7 @@ public class SearchActivity extends AppCompatActivity {
         searchResultView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long id) {
-                ArrayList<Recipe> searchList = new ArrayList<>(searchResults);
+                ArrayList<Recipe> searchList = new ArrayList<>(sortedSearchResults);
                 recipeCache = searchList.get(position);
                 int recipePosition = 0;
 
@@ -106,6 +106,8 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         Recipe editedRecipe = null;
+
+        // Get list of recipes and the edited recipe from the last activity.
         if (requestCode == SEARCH_RECIPE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 recipes = (ArrayList<Recipe>) intent.getSerializableExtra("recipes");
@@ -113,11 +115,14 @@ public class SearchActivity extends AppCompatActivity {
             }
         }
 
+        // Add the edited recipe to the search results
         for (Recipe r : recipes) {
             if (r.getName().equals(editedRecipe.getName())) {
-                sortedSearchResults.add(r);
+                searchResults.add(r);
             }
         }
+        sortedSearchResults = new ArrayList<>();
+        sortedSearchResults.addAll(searchResults);
         Collections.sort(sortedSearchResults); // re-sort after editing recipe
         Collections.reverse(sortedSearchResults);
 
@@ -125,6 +130,10 @@ public class SearchActivity extends AppCompatActivity {
         searchResultNames = new ArrayList<>();
         for (Recipe r : sortedSearchResults) {
             searchResultNames.add(r.getName());
+        }
+
+        for (Recipe r : sortedSearchResults) {
+            System.out.println(r.getName() + ": " + r.getMatchCount());
         }
 
         noSelectionList = new ArrayAdapter<>(this,
