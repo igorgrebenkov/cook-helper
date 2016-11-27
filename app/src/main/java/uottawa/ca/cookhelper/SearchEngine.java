@@ -2,6 +2,7 @@ package uottawa.ca.cookhelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EmptyStackException;
 import java.util.HashSet;
 import java.util.Stack;
 
@@ -249,12 +250,21 @@ class SearchEngine {
             for (String t : postFix) {
                 if (t.equals("AND") || t.equals("OR")) {
                     while (!toEvaluate.isEmpty()) {
-                        operands.add(toEvaluate.pop());
+                        try {
+                            operands.add(toEvaluate.pop());
+                        } catch (NullPointerException e) {
+                            System.out.println("NullPointerException: " + e.getMessage());
+                        }
                     }
                     evaluated.addAll(performOperation(t, operands));
                     operands = new ArrayList<>();
                 } else if (t.equals("NOT")) {
-                    operands.add(toEvaluate.pop()); // Only want the last operand for NOT
+                    try {
+                        operands.add(toEvaluate.pop()); // Only want the last operand for NOT
+
+                    } catch (EmptyStackException e) {
+                        System.out.println("EmptyStackException: " + e.getMessage());
+                    }
                     evaluated.addAll(performOperation(t, operands));
                     operands = new ArrayList<>();
                 } else {
