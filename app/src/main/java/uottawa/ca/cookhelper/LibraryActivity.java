@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 public class LibraryActivity extends AppCompatActivity {
@@ -29,6 +30,7 @@ public class LibraryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_library);
 
         recipes = (ArrayList<Recipe>) getIntent().getSerializableExtra("recipeList");
+        Collections.sort(recipes); // Sort for alphabetical order
 
         for (Recipe r : recipes) {
             System.out.println(r.getName() + ": " + r.getMatchCount());
@@ -161,7 +163,7 @@ public class LibraryActivity extends AppCompatActivity {
                 recipes = (ArrayList<Recipe>) intent.getSerializableExtra("recipes");
             }
         }
-
+        Collections.sort(recipes);  // Re-sort for alphabetical order
         // Update recipe names with the returned recipeList
         recipeNames = new ArrayList<String>();
         for (Recipe r : recipes) {
