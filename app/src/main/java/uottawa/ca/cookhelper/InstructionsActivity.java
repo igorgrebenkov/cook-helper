@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.webkit.WebView;
 
 public class InstructionsActivity extends AppCompatActivity {
-    WebView webView;
+    WebView webView;    // WebView for the instructions
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instructions);
 
-        webView = (WebView) findViewById(R.id.webView);
+        webView = (WebView) findViewById(R.id.instructionsWebView);
         webView.loadUrl("file:///android_asset/instructions.html");
     }
 }

@@ -47,6 +47,15 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    /**
+     * Action associated with the about button.
+     * @param view the view
+     */
+    protected void aboutButtonAction(View view) {
+        Intent i = new Intent(this, AboutActivity.class);
+        startActivity(i);
+    }
+
 
     /**
      * Used to pass the list of recipes back from the RecipeActivity so that
@@ -93,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                         "3. Pour into glass and cover with whipped cream.");
 
         Recipe c = new Recipe("Bagel & Lox with Cream Cheese",
-                "Jewish",
+                "American",
                 "Breakfast",
                 20,
                 2,

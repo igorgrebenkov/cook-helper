@@ -41,7 +41,8 @@
             android:text="@string/aboutBtnTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/aboutBtn" />
+            android:id="@+id/aboutBtn"
+            android:onClick="aboutButtonAction" />
 
     </LinearLayout>
 
