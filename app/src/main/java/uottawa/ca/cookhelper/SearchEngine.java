@@ -2,6 +2,7 @@ package uottawa.ca.cookhelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.PriorityQueue;
@@ -9,34 +10,64 @@ import java.util.Set;
 import java.util.Stack;
 
 public class SearchEngine {
-    private ArrayList<Recipe> recipes;  // The list of recipes
-    private String searchString;        // The user's input in string form
-    private ArrayList<String> tokens;
-    private ArrayList<String> postFix;
-    private HashSet<Recipe> searchResults;
+    private ArrayList<Recipe> recipes;      // The list of recipes
+    private ArrayList<String> tokens;       // The list of tokens
+    private ArrayList<String> postFix;     // The list of tokens in postfix notation
+    private HashSet<Recipe> searchResults; // The set of search results
+    private ArrayList<Recipe> sortedSearchResults;
 
     public SearchEngine(ArrayList<Recipe> recipes, String searchString) {
         this.recipes = recipes;
-        this.searchString = searchString;
         tokens = tokenize(searchString);
         postFix = toPostfix(tokens);
         searchResults = evaluate();
+        sortedSearchResults = new ArrayList<>();
+        sortedSearchResults.addAll(searchResults);
+        Collections.sort(sortedSearchResults);
+        Collections.reverse(sortedSearchResults);
     }
 
+    /**
+     * Getter for the Set of search results.
+     *
+     * @return the set of search results
+     */
     public HashSet<Recipe> getSearchResults() {
         return searchResults;
     }
 
+    /**
+     * Getter for search results sorted by match count.
+     * @return the sorted search results
+     */
+    public ArrayList<Recipe> getSortedSearchResults() {
+        return sortedSearchResults;
+    }
+
+    /**
+     * A simple tokenizer that parses the user's search string into individual tokens.
+     *
+     * @param s the string to tokenize
+     * @return a list of tokens
+     */
     private ArrayList<String> tokenize(String s) {
         ArrayList<String> ret = new ArrayList<>();
         String token = "";
+
+        // Build token list
+        //   - Each word separated by white space is saved
+        //     in a string and added to the list of tokens.
+        //   - Parentheses are also saved as tokens since they
+        //     may be used to indicate operator precedence
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             if (c == '(') {
                 ret.add(Character.toString(c));
             } else if (c == ')') {
-                ret.add(token);
-                token = "";
+                if (!token.equals("")) {
+                    ret.add(token);
+                    token = "";
+                }
                 ret.add(Character.toString(c));
             } else if (c != ' ') {
                 token += c;
@@ -48,16 +79,28 @@ public class SearchEngine {
             }
         }
 
+        // Add remaining token if it exists
         if (!token.equals("")) {
             ret.add(token);
         }
 
+        // When searching for ingredients, we may want a token
+        // that is longer than one word. e.g., "ice cream".
+        //
+        // This section iterates through the tokens and checks if the
+        // token following it  in the liss is an operator. If it is not, the current and
+        // next string are concatenated with a space and added to the token list.
         for (int i = 0; i < ret.size() - 1; i++) {
             String curr = ret.get(i);
             String next = ret.get(i + 1);
-
-            if (!(curr.equals("(") || curr.equals("AND") || curr.equals("OR"))) {
-                if (!(next.equals(")") || next.equals("AND") || next.equals("OR"))) {
+            if (!(curr.equals("(") ||
+                    curr.equals("AND") ||
+                    curr.equals("OR") ||
+                    curr.equals("NOT"))) {
+                if (!(next.equals(")") ||
+                        next.equals("AND") ||
+                        next.equals("OR") ||
+                        next.equals("NOT"))) {
                     curr = curr + " " + next;
                     ret.add(i, curr);
                     ret.remove(i + 1);
@@ -68,26 +111,44 @@ public class SearchEngine {
         return ret;
     }
 
+    /**
+     * Converts a list of tokens in infix notation to a
+     * list of tokens in postfix notation.
+     * @param arr the list of tokens in infix notation
+     * @return the list of tokens in postfix notation
+     */
     private ArrayList<String> toPostfix(ArrayList<String> arr) {
-        Stack<String> op = new Stack<>();
-        ArrayList<String> output = new ArrayList<>();
+        Stack<String> op = new Stack<>();               // stack for operator tokens
+        ArrayList<String> output = new ArrayList<>();   // the postfix token list
 
+        // When an operator or open parentheses is encountered, push to stack op.
+        // When a non-operator is encountered, add it to the output list.
+        // When a closed parentheses is encountered, pop everything off the
+        // stack to the output list until we pop an open parentheses.
         for (String t : arr) {
-            if (t.equals("AND") || t.equals("OR") || t.equals("NOT")) {
-                op.push(t);
-            } else if (t.equals("(")) {
-                op.push(t);
-            } else if (t.equals(")")) {
-                String popped = op.pop();
-                while (!popped.equals("(")) {
-                    output.add(popped);
-                    popped = op.pop();
-                }
-            } else {
-                output.add(t);
+            switch (t) {
+                case "AND":
+                case "OR":
+                case "NOT":
+                    op.push(t);
+                    break;
+                case "(":
+                    op.push(t);
+                    break;
+                case ")":
+                    String popped = op.pop();
+                    while (!popped.equals("(")) {
+                        output.add(popped);
+                        popped = op.pop();
+                    }
+                    break;
+                default:
+                    output.add(t);
+                    break;
             }
         }
 
+        // Adds any remaining operators to the output list
         for (String s : op) {
             if (s.equals("AND") || s.equals("OR") || s.equals("NOT")) {
                 output.add(s);
@@ -96,12 +157,18 @@ public class SearchEngine {
         return output;
     }
 
+    /**
+     * Evaluates a boolean expression in postfix notation from a list of tokens.
+     * The result is a HashSet of recipes that comprise the search results.
+     * A HashSet was used primarily because it avoids adding duplicate entries.
+     * @return the HashSet of search results
+     */
     private HashSet<Recipe> evaluate() {
-        Stack<String> eval = new Stack<>();
-        ArrayList<String> operands = new ArrayList<>();
-        HashSet<Recipe> evaluated = new HashSet<>();
-        String lastOperator = "";
+        Stack<String> toEvaluate = new Stack<>();       // Operands for an operation are pushed here
+        ArrayList<String> operands = new ArrayList<>(); // List of operands for an operation
+        HashSet<Recipe> evaluated = new HashSet<>();    // The search result HashSet
 
+        // Case with just a single token
         if (postFix.size() == 1) {
             for (Recipe r : recipes) {
                 for (String t : postFix) {
@@ -113,43 +180,58 @@ public class SearchEngine {
                 }
             }
         } else {
+            // Iterate through the tokens
+            // If not an operand, push the token to the toEvaluate stack.
+            // If an operand, generate operand list by popping until toEvaluate is empty
+            // and perform the operation.
             for (String t : postFix) {
-                if (t.equals("AND") || t.equals("OR") || t.equals("NOT")) {
-                    lastOperator = t;
-                    while (!eval.isEmpty()) {
-                        operands.add(eval.pop());
+                if (t.equals("AND") || t.equals("OR")) {
+                    while (!toEvaluate.isEmpty()) {
+                        operands.add(toEvaluate.pop());
                     }
                     evaluated.addAll(performOperation(t, operands, evaluated));
                     operands = new ArrayList<>();
+                } else if (t.equals("NOT")){
+                    operands.add(toEvaluate.pop());
+                    evaluated.addAll(performOperation(t, operands, evaluated));
+                    operands = new ArrayList<>();
                 } else {
-                    eval.push(t);
+                    toEvaluate.push(t);
                 }
             }
         }
         return evaluated;
     }
 
+    /**
+     * Performs a boolean operation consisting of one operator and a set of operands.
+     * @param operator the operator
+     * @param operands the operands
+     * @param currentSearchResults the current list of recipes in the search results
+     * @return
+     */
     private HashSet<Recipe> performOperation(String operator, ArrayList<String> operands,
                                              HashSet<Recipe> currentSearchResults) {
         HashSet<Recipe> result = new HashSet<>();
 
-
-        if (currentSearchResults != null &&
-                operands.size() == 1 &&
+        if (currentSearchResults != null &&  // Case where last operation is an AND
+                operands.size() == 1 &&       // e.g. (Tomatoes OR Garlic) AND Bagel
                 operator.equals("AND")) {
+
+            // We may have some search results that met the search criteria up to this
+            // last AND operation, but that now have to be removed if they don't have
+            // a match for the last search term
             Iterator<Recipe> i = currentSearchResults.iterator();
 
+            // Check if the results contain the last search term entered by the user
             while (i.hasNext()) {
                 Recipe r = i.next();
                 if (!r.getListOfIngredients().contains(operands.get(0)) &&
                         !r.getCategoryOfRecipe().equals(operands.get(0)) &&
                         !r.getCountryStyle().equals(operands.get(0))) {
+                    r.decrementMatchCount();
                     i.remove();
                 }
-            }
-
-            for (Recipe r : currentSearchResults) {
-
             }
         } else if (operator.equals("OR")) {
             for (Recipe r : recipes) {
@@ -158,7 +240,7 @@ public class SearchEngine {
                             r.getCategoryOfRecipe().equals(o) ||
                             r.getCountryStyle().equals(o)) {
                         result.add(r);
-                        //s.incrementMatchCount();
+                        r.incrementMatchCount();
                     }
                 }
             }
@@ -166,15 +248,29 @@ public class SearchEngine {
             for (Recipe r : recipes) {
                 int matchCount = 0;
                 for (String o : operands) {
+                    // matchCount is incremented each time a token matches
+                    //   - used later to check if every token was found in the recipe
                     if (r.getListOfIngredients().contains(o) ||
                             r.getCategoryOfRecipe().equals(o) ||
                             r.getCountryStyle().equals(o)) {
                         matchCount++;
+                        r.incrementMatchCount();
                     }
                 }
+                // Add if all tokens found in the recipe
                 if (matchCount == operands.size() && matchCount != 0) {
                     result.add(r);
-                    //s.incrementMatchCount();
+                }
+            }
+        } else if (operator.equals("NOT")) {
+            for (Recipe r : recipes) {
+                for (String o : operands) {
+                    if (!r.getListOfIngredients().contains(o) &&
+                            !r.getCategoryOfRecipe().equals(o) &&
+                            !r.getCountryStyle().equals(o)) {
+                        result.add(r);
+                        r.incrementMatchCount();
+                    }
                 }
             }
         }

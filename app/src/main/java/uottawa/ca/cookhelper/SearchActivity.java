@@ -10,12 +10,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 
 public class SearchActivity extends AppCompatActivity {
     private ArrayList<Recipe> recipes;                      // The list of recipes
     private ArrayList<String> searchResultNames;                  // The list of recipe names
     private HashSet<Recipe> searchResults;
+    private ArrayList<Recipe> sortedSearchResults;
     private ListView searchResultView;                // ListView for Recipes
     private ArrayAdapter<String> noSelectionList;   // Adapter w/ no selection
     private Recipe recipeCache;
@@ -65,22 +67,32 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     protected void searchButtonAction(View view) {
+        // Reset match counts
+        for (Recipe r : recipes) {
+            r.resetMatchCount();
+        }
+
         searchResultNames = new ArrayList<>();
 
         TextView searchView = (TextView) findViewById(R.id.searchText);
         String searchString = searchView.getText().toString();
         SearchEngine s = new SearchEngine(recipes, searchString);
         searchResults = s.getSearchResults();
+        sortedSearchResults = s.getSortedSearchResults();
 
         s.printPostFix();
 
-        for (Recipe r : searchResults) {
+        for (Recipe r : sortedSearchResults) {
             searchResultNames.add(r.getName());
         }
 
         noSelectionList = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, searchResultNames);
         searchResultView.setAdapter(noSelectionList);
+
+        for (Recipe r : sortedSearchResults) {
+            System.out.println(r.getName() + ": " + r.getMatchCount());
+        }
     }
 
     /**
@@ -103,12 +115,15 @@ public class SearchActivity extends AppCompatActivity {
 
         for (Recipe r : recipes) {
             if (r.getName().equals(editedRecipe.getName())) {
-                searchResults.add(r);
+                sortedSearchResults.add(r);
             }
         }
+        Collections.sort(sortedSearchResults); // re-sort after editing recipe
+        Collections.reverse(sortedSearchResults);
+
 
         searchResultNames = new ArrayList<>();
-        for (Recipe r : searchResults) {
+        for (Recipe r : sortedSearchResults) {
             searchResultNames.add(r.getName());
         }
 
@@ -124,6 +139,11 @@ public class SearchActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
+        // Reset match counts
+        for (Recipe r : recipes) {
+            r.resetMatchCount();
+        }
+
         Intent intent = getIntent();
         intent.putExtra("recipes", recipes);
         setResult(RESULT_OK, intent);

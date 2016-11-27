@@ -30,6 +30,10 @@ public class LibraryActivity extends AppCompatActivity {
 
         recipes = (ArrayList<Recipe>) getIntent().getSerializableExtra("recipeList");
 
+        for (Recipe r : recipes) {
+            System.out.println(r.getName() + ": " + r.getMatchCount());
+        }
+
         // Recipe names used for recipeListView labels
         recipeNames = new ArrayList<>();
         for (Recipe r : recipes) {

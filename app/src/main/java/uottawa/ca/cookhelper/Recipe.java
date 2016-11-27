@@ -3,7 +3,7 @@ package uottawa.ca.cookhelper;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class Recipe implements Serializable {
+public class Recipe implements Serializable, Comparable<Recipe> {
     private String name;
     private String countryStyle;
     private String categoryOfRecipe;
@@ -11,6 +11,7 @@ public class Recipe implements Serializable {
     private int servingSize;
     private String listOfIngredients;
     private String instructions;
+    private int matchCount;
 
     public Recipe() {
         char[] chars = new char[40];
@@ -23,6 +24,23 @@ public class Recipe implements Serializable {
         servingSize = 0;
         listOfIngredients = s;
         instructions = s;
+        matchCount = 0;
+    }
+
+    public int getMatchCount() {
+        return matchCount;
+    }
+
+    public void incrementMatchCount() {
+        matchCount++;
+    }
+
+    public void decrementMatchCount() {
+        matchCount--;
+    }
+
+    public void resetMatchCount() {
+        matchCount = 0;
     }
 
     public Recipe(String name, String countryStyle, String categoryOfRecipe, int timetoCook, int servingSize, String listOfIngredients, String instructions) {
@@ -89,5 +107,10 @@ public class Recipe implements Serializable {
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
+    }
+
+    @Override
+    public int compareTo(Recipe r) {
+        return this.getMatchCount() - r.getMatchCount();
     }
 }

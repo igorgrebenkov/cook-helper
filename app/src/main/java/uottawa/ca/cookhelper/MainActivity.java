@@ -68,14 +68,14 @@ public class MainActivity extends AppCompatActivity {
                 20,
                 2,
                 "4 scoops chocolate ice cream\n" +
-                        "2 cups milk\n" +
-                        "1 can whipped cream",
-                "1. Put ice cream and milk into a blender. \n" +
-                        "2. Blend until shake is a creamy consistency. \n" +
+                        "2 cups Milk\n" +
+                        "1 can Whipped cream",
+                "1. Put ice cream and milk into a blender.\n" +
+                        "2. Blend until shake is a creamy consistency.\n" +
                         "3. Pour into glass and cover with whipped cream.");
 
         Recipe c = new Recipe("Bagel & Lox with Cream Cheese",
-                "American",
+                "Jewish",
                 "Breakfast",
                 20,
                 2,
@@ -85,10 +85,21 @@ public class MainActivity extends AppCompatActivity {
                 "1. Cut bagel in half horizontally. \n" +
                         "2. Spread cream cheese on both sides of the bagel. \n" +
                         "3. Cover both sides of the bagel with lox.");
+
+        Recipe d = new Recipe("Bagel with Cream Cheese",
+                "American",
+                "Breakfast",
+                20,
+                2,
+                "4tbs Cream Cheese \n" +
+                        "1 Bagel",
+                "1. Cut bagel in half horizontally. \n" +
+                        "2. Spread cream cheese on both sides of the bagel.");
         ArrayList<Recipe> r = new ArrayList<>();
         r.add(a);
         r.add(b);
         r.add(c);
+        r.add(d);
         return r;
     }
 }
