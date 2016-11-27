@@ -16,11 +16,9 @@ public class SearchEngine {
     private ArrayList<String> postFix;              // The list of tokens in postfix notation
     private HashSet<Recipe> searchResults;          // The set of search results
     private ArrayList<Recipe> sortedSearchResults;  // The sorted list of search results
-    private Context context;                        // Used for invalid input dialog
 
-    public SearchEngine(ArrayList<Recipe> recipes, String searchString, Context context) {
+    public SearchEngine(ArrayList<Recipe> recipes, String searchString) {
         this.recipes = recipes;
-        this.context = context;
         tokens = tokenize(searchString);
         postFix = toPostfix(tokens);
         searchResults = evaluate();
@@ -126,7 +124,6 @@ public class SearchEngine {
                     tokens.add(i + 1, ")");
                     haveNot = false;
                 }
-
             }
         }
     }
@@ -265,7 +262,7 @@ public class SearchEngine {
      *
      * @param operator the operator
      * @param operands the operands
-     * @return
+     * @return the HashSet of results for this round of operation
      */
     private HashSet<Recipe> performOperation(String operator, ArrayList<String> operands) {
         HashSet<Recipe> result = new HashSet<>();
@@ -306,20 +303,6 @@ public class SearchEngine {
                 break;
         }
         return result;
-    }
-
-    private void displayBadInputAlert() {
-        System.out.println("TEST");
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(false);
-        builder.setTitle("ERROR: Invalid input.");
-        builder.setMessage("Please check your input for mis-matched parenthes or other errors.");
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-
-            }
-        });
     }
 
     public void printTokens() {
