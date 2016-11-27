@@ -14,14 +14,13 @@ import java.util.Collections;
 import java.util.HashSet;
 
 public class SearchActivity extends AppCompatActivity {
-    private ArrayList<Recipe> recipes;                      // The list of recipes
-    private ArrayList<String> searchResultNames;                  // The list of recipe names
-    private HashSet<Recipe> searchResults;
-    private ArrayList<Recipe> sortedSearchResults;
-    private ListView searchResultView;                // ListView for Recipes
-    private ArrayAdapter<String> noSelectionList;   // Adapter w/ no selection
-    private Recipe recipeCache;
-    private final static int SEARCH_RECIPE_REQUEST = 1;  // Used to return recipes list from RecipeActivity
+    private ArrayList<Recipe> recipes;                   // The list of recipes
+    private ArrayList<String> searchResultNames;         // List of recipe names in search results
+    private HashSet<Recipe> searchResults;               // HashSet of search results
+    private ArrayList<Recipe> sortedSearchResults;       // List of search results sorted by rank
+    private ListView searchResultView;                   // ListView for Recipes
+    private ArrayAdapter<String> noSelectionList;        // Adapter w/ no list selection
+    private final static int SEARCH_RECIPE_REQUEST = 1;  // For returning data from RecipeActivity
 
 
     @Override
@@ -30,7 +29,6 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         recipes = (ArrayList<Recipe>) getIntent().getSerializableExtra("recipeList");
-
         searchResultNames = new ArrayList<>();
 
         // Adapter init
@@ -45,19 +43,23 @@ public class SearchActivity extends AppCompatActivity {
         searchResultView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long id) {
-                ArrayList<Recipe> searchList = new ArrayList<>(sortedSearchResults);
-                recipeCache = searchList.get(position);
+                // Save the recipe just clicked on so we can fetch its position in the recipe list
+                Recipe recipeCache = sortedSearchResults.get(position);
                 int recipePosition = 0;
 
+                // Find the index of Recipe recipeCache in the recipe list
                 for (Recipe r : recipes) {
                     if (r.getName().equals(recipeCache.getName())) {
                         recipePosition = recipes.indexOf(r);
                     }
                 }
+                // Remove it since it may be edited
+                // (we will re-add it when returning to this activity)
                 searchResults.remove(recipeCache);
+
                 // Use bundle to pass serialized data to RecipeActivity
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("position", recipePosition);  // index of clicked recipe
+                bundle.putSerializable("position", recipePosition);
                 bundle.putSerializable("recipeList", recipes);
                 Intent i = new Intent(SearchActivity.this, RecipeActivity.class);
                 i.putExtras(bundle);
@@ -66,13 +68,16 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Action associated with the Search button.
+     *
+     * @param view the view
+     */
     protected void searchButtonAction(View view) {
-        // Reset match counts
+        // Reset all match counts
         for (Recipe r : recipes) {
             r.resetMatchCount();
         }
-
-        searchResultNames = new ArrayList<>();
 
         TextView searchView = (TextView) findViewById(R.id.searchText);
         String searchString = searchView.getText().toString();
@@ -82,14 +87,11 @@ public class SearchActivity extends AppCompatActivity {
 
         s.printPostFix();
 
-        for (Recipe r : sortedSearchResults) {
-            searchResultNames.add(r.getName());
-        }
+        // Update ListView contents
+        refreshSearchResultNames();
+        refreshListView();
 
-        noSelectionList = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, searchResultNames);
-        searchResultView.setAdapter(noSelectionList);
-
+        //!!!!!!!!!!!!!!!!!!!!!!!! REMOVE LATER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         for (Recipe r : sortedSearchResults) {
             System.out.println(r.getName() + ": " + r.getMatchCount());
         }
@@ -107,7 +109,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         Recipe editedRecipe = null;
 
-        // Get list of recipes and the edited recipe from the last activity.
+        // Get list of recipes and the (possibly) edited recipe from the last activity.
         if (requestCode == SEARCH_RECIPE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 recipes = (ArrayList<Recipe>) intent.getSerializableExtra("recipes");
@@ -116,29 +118,31 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         // Add the edited recipe to the search results
+        // (remember we removed it earlier in the onItemClick method in case it will be edited)
         for (Recipe r : recipes) {
             if (r.getName().equals(editedRecipe.getName())) {
                 searchResults.add(r);
             }
         }
+
+        // searchResult HashSet may have changed (if an edit was made), so
+        // we must re-create the sortedSearchResults ArrayList
         sortedSearchResults = new ArrayList<>();
         sortedSearchResults.addAll(searchResults);
         Collections.sort(sortedSearchResults); // re-sort after editing recipe
         Collections.reverse(sortedSearchResults);
 
+        // Update ListView contents
+        refreshSearchResultNames();
+        refreshListView();
 
-        searchResultNames = new ArrayList<>();
-        for (Recipe r : sortedSearchResults) {
-            searchResultNames.add(r.getName());
-        }
 
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! REMOVE LATER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         for (Recipe r : sortedSearchResults) {
+            System.out.println("Fuck");
             System.out.println(r.getName() + ": " + r.getMatchCount());
         }
 
-        noSelectionList = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, searchResultNames);
-        searchResultView.setAdapter(noSelectionList);
     }
 
     /**
@@ -157,5 +161,25 @@ public class SearchActivity extends AppCompatActivity {
         intent.putExtra("recipes", recipes);
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    /************************* Private helper functions *************************/
+    /**
+     * Creates and sets a new Adapter to refresh the ListView contents.
+     */
+    private void refreshListView() {
+        noSelectionList = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, searchResultNames);
+        searchResultView.setAdapter(noSelectionList);
+    }
+
+    /**
+     * Re-initializes the searchResultNames ArrayList with the current search results.
+     */
+    private void refreshSearchResultNames() {
+        searchResultNames = new ArrayList<>();
+        for (Recipe r : sortedSearchResults) {
+            searchResultNames.add(r.getName());
+        }
     }
 }

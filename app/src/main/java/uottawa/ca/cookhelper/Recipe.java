@@ -125,6 +125,13 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     @Override
     public int compareTo(Recipe r) {
-        return this.getMatchCount() - r.getMatchCount();
+        int matchCountCompare = this.getMatchCount() - r.getMatchCount();
+        int nameCompare = this.getName().compareTo(r.getName());
+
+        if (matchCountCompare != 0) {
+            return matchCountCompare;
+        } else {
+            return nameCompare;
+        }
     }
 }
