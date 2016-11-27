@@ -34,7 +34,8 @@
             android:text="@string/instructionsBtnTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/instructionsBtn" />
+            android:id="@+id/instructionsBtn"
+            android:onClick="instructionsButtonAction" />
 
         <Button
             android:text="@string/aboutBtnTxt"

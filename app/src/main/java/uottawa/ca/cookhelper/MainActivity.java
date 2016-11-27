@@ -30,6 +30,11 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(i, RECIPE_REQUEST);
     }
 
+    protected void instructionsButtonAction(View view) {
+        Intent i = new Intent(this, InstructionsActivity.class);
+        startActivity(i);
+    }
+
     /**
      * Used to pass the list of recipes back from the RecipeActivity so that
      * recipes may be edited and saved.
