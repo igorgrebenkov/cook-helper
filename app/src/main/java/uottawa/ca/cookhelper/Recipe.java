@@ -194,7 +194,11 @@ public class Recipe implements Serializable, Comparable<Recipe> {
      */
     @Override
     public int compareTo(Recipe r) {
-        int matchCountCompare = this.getMatchCount() - r.getMatchCount();
+        // Opposite of expected result for comparing integers
+        // This is to be able to rank by decreasing matchCount if matchCounts are unequal
+        // Or by alphabetical order of Recipe name otherwise
+        int matchCountCompare = r.getMatchCount() - this.getMatchCount();
+
         int nameCompare = this.getName().compareTo(r.getName());
 
         if (matchCountCompare != 0) {

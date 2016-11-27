@@ -85,8 +85,6 @@ public class SearchActivity extends AppCompatActivity {
         searchResults = s.getSearchResults();
         sortedSearchResults = s.getSortedSearchResults();
 
-        s.printPostFix();
-
         // Update ListView contents
         refreshSearchResultNames();
         refreshListView();
@@ -125,7 +123,6 @@ public class SearchActivity extends AppCompatActivity {
         sortedSearchResults = new ArrayList<>();
         sortedSearchResults.addAll(searchResults);
         Collections.sort(sortedSearchResults); // re-sort after editing recipe
-        Collections.reverse(sortedSearchResults);
 
         // Update ListView contents
         refreshSearchResultNames();

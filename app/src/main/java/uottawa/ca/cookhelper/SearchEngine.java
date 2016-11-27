@@ -20,7 +20,6 @@ public class SearchEngine {
         sortedSearchResults = new ArrayList<>();
         sortedSearchResults.addAll(searchResults);
         Collections.sort(sortedSearchResults);
-        Collections.reverse(sortedSearchResults);
     }
 
     /**

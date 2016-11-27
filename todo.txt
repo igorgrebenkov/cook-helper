@@ -1,7 +1,5 @@
 todo:
 
 when editing recipe field, put cursor at first position
-list recipes in alphabetical order in recipe list
-make searches purely by rank - no exact matching
 add error correction for mismatched parentheses
 ignore case when searching 
