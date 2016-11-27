@@ -55,7 +55,8 @@
             <h4>Searching for Recipes</h4>
             <p>
                 To search for recipes from the recipe list, tap the <i>Search Recipes</i> button
-                on the main screen. Searches may be performed by Ingredient/Category/Country.
+                on the main screen and enter search term(s). Searches may be performed by
+                Ingredient/Category/Country. Searches are <i>not</i> case-sensitive.
             </p>
             <p>
                 The following boolean operators may be used to combine search terms:
@@ -66,37 +67,18 @@
                 <li> NOT </li>
             </ul>
             <p>
-                When more than one boolean operator is used, precedence of operations MUST be
-                indicated with parentheses. For example, to search for the AND of three ingredients,
+                For example,
             </p>
             <div style="padding:12px;background-color:#d3d3d3;line-height:1.4;">
-                (Ingredient1 AND Ingredient2) AND Ingredient3
+                    tomatoes AND avocado AND NOT onions
             </div>
-            <p>
-                is the required input. Note that,
-            </p>
-            <div style="padding:12px;background-color:#d3d3d3;line-height:1.4;">
-                Ingredient1 AND Ingredient2 AND Ingredient3
-            </div>
-            <p>
-                is <i>not</i> correct.
-            </p>
-            <p>
-                Similarly, for the AND/OR of three ingredients,
-            </p>
-            <div style="padding:12px;background-color:#d3d3d3;line-height:1.4;">
-                <font size = "1">
-                    ((Ingredient1 AND Ingredient2) OR Ingredient3) AND Ingredient4
-                </font>
-            </div>
-            <p>
-                is the required input.
-            </p>
             <p>
                 Search results are sorted by the number of matching search terms. Recipes
-                with the most matching search terms will be at the top, and the rest follow
+                with the most matching search terms will be at the top, and the rest will follow
                 in descending order.
             </p>
+
+
 
 
 
