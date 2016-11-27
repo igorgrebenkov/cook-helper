@@ -226,9 +226,9 @@ public class SearchEngine {
         if (postFix.size() == 1) {
             for (Recipe r : recipes) {
                 for (String t : postFix) {
-                    if (r.getListOfIngredients().contains(t) ||
-                            r.getCategoryOfRecipe().equals(t) ||
-                            r.getCountryStyle().equals(t)) {
+                    if (r.getListOfIngredients().toLowerCase().contains(t.toLowerCase()) ||
+                            r.getCategoryOfRecipe().toLowerCase().equals(t.toLowerCase()) ||
+                            r.getCountryStyle().toLowerCase().equals(t.toLowerCase())) {
                         evaluated.add(r);
                     }
                 }
@@ -280,9 +280,9 @@ public class SearchEngine {
             case "OR":
                 for (Recipe r : recipes) {
                     for (String o : operands) {
-                        if (r.getListOfIngredients().contains(o) ||
-                                r.getCategoryOfRecipe().equals(o) ||
-                                r.getCountryStyle().equals(o)) {
+                        if (r.getListOfIngredients().toLowerCase().contains(o.toLowerCase()) ||
+                                r.getCategoryOfRecipe().toLowerCase().equals(o.toLowerCase()) ||
+                                r.getCountryStyle().toLowerCase().equals(o.toLowerCase())) {
                             r.incrementMatchCount();
                             result.add(r);
                         }
@@ -292,9 +292,9 @@ public class SearchEngine {
             case "NOT":
                 for (Recipe r : recipes) {
                     for (String o : operands) {
-                        if (!r.getListOfIngredients().contains(o) &&
-                                !r.getCategoryOfRecipe().equals(o) &&
-                                !r.getCountryStyle().equals(o)) {
+                        if (!r.getListOfIngredients().toLowerCase().contains(o.toLowerCase()) &&
+                                !r.getCategoryOfRecipe().toLowerCase().equals(o.toLowerCase()) &&
+                                !r.getCountryStyle().toLowerCase().equals(o.toLowerCase())) {
                             r.incrementMatchCount();
                             result.add(r);
                         }
