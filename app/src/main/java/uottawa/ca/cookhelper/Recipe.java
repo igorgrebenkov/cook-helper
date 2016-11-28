@@ -200,6 +200,15 @@ public class Recipe implements Serializable, Comparable<Recipe> {
     }
 
     /**
+     * Decrements the matchCount (if not = 0)
+     */
+    public void decrementMatchCount() {
+        if (matchCount != 0) {
+            matchCount--;
+        }
+    }
+
+    /**
      * Resets the matchCount to 0.
      */
     public void resetMatchCount() {

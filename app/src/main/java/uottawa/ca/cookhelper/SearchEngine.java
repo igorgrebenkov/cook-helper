@@ -315,6 +315,11 @@ class SearchEngine {
                                 !r.getCountryStyle().toLowerCase().equals(o.toLowerCase())) {
                             r.incrementMatchCount();
                             result.add(r);
+                        } else if (r.getListOfIngredients().toLowerCase().contains(o.toLowerCase()) ||
+                                r.getCategoryOfRecipe().toLowerCase().equals(o.toLowerCase()) ||
+                                r.getCountryStyle().toLowerCase().equals(o.toLowerCase())) {
+                            r.decrementMatchCount();
+                            result.remove(r);
                         }
                     }
                 }

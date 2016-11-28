@@ -18,7 +18,7 @@
         <activity android:name=".LibraryActivity" />
         <activity android:name=".RecipeActivity" />
         <activity android:name=".SearchActivity"
-            android:windowSoftInputMode="adjustNothing"/>
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".InstructionsActivity" />
         <activity android:name=".AboutActivity"></activity>
     </application>

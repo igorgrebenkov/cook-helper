@@ -61,13 +61,15 @@ public class RecipeGenerator {
                 "1. Cut bagel in half horizontally. \n" +
                         "2. Spread cream cheese on both sides of the bagel.");
 
-        Recipe e = new Recipe("Bagel w/ Cream Cheese, Lox & Onions",
+        Recipe e = new Recipe("Bagel w/ Cream Cheese, Lox & Onion",
                 "American",
                 "Breakfast",
                 10,
                 1,
                 "4tbs Cream Cheese \n" +
-                        "1 Bagel",
+                        "1 Bagel\n" +
+                        "9 oz. Lox\n" +
+                        "3 slices Onion",
                 "1. Cut bagel in half horizontally. \n" +
                         "2. Spread cream cheese on both sides of the bagel. \n" +
                         "3. Cut onions into thin slices and place on the bagel.\n" +

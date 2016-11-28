@@ -90,8 +90,9 @@ public class SearchActivity extends AppCompatActivity {
         searchResults = s.getSearchResults();
         sortedSearchResults = s.getSortedSearchResults();
 
-        s.printPostFix();
-        System.out.println();
+        for (Recipe r : sortedSearchResults) {
+            System.out.println(r.getName() + " : " + r.getMatchCount());
+        }
 
         // Update ListView contents
         refreshSearchResultNames();
