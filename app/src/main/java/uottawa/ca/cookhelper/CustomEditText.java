@@ -53,6 +53,8 @@ public class CustomEditText extends EditText {
         System.out.println(getText().toString());
         if (getText().toString().equals("")) {
             setSelection(0);
+        } else if (getText().toString().equals("0")) {
+            setSelection(1);
         }
     }
 }

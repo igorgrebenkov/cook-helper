@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Load example recipes
+        System.out.println("test");
         recipes = RecipeGenerator.generateRecipes();
     }
 

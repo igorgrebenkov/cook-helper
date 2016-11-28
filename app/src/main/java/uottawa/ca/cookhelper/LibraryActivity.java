@@ -38,10 +38,6 @@ public class LibraryActivity extends AppCompatActivity {
         recipes = (ArrayList<Recipe>) getIntent().getSerializableExtra("recipeList");
         Collections.sort(recipes); // Sort for alphabetical order
 
-        for (Recipe r : recipes) {
-            System.out.println(r.getName() + ": " + r.getMatchCount());
-        }
-
         // Recipe names used for recipeListView labels
         recipeNames = new ArrayList<>();
         for (Recipe r : recipes) {
@@ -123,19 +119,27 @@ public class LibraryActivity extends AppCompatActivity {
         }
 
         // Delete the selected items from the Recipe list and recipe name list
-        Iterator<String> iterNamesToDelete = toDelete.iterator();
-        Iterator<Recipe> iterRecipesToDelete = recipes.iterator();
+        Iterator<Recipe> iterRecipes = recipes.iterator();
+        Iterator<String> iterRecipeNames = recipeNames.iterator();
 
-        while (iterNamesToDelete.hasNext()) {
-            String name = iterNamesToDelete.next();
-            recipeNames.remove(name);
-            while (iterRecipesToDelete.hasNext()) {
-                Recipe r = iterRecipesToDelete.next();
-                if (name.equals(r.getName())) {
-                    iterRecipesToDelete.remove();
+        // Remove recipe names for recipes that were deleted the list
+        while (iterRecipeNames.hasNext()) {
+            String next = iterRecipeNames.next();
+            for (String n : toDelete) {
+                if (next.equals(n)) {
+                    iterRecipeNames.remove();
                 }
             }
+        }
 
+        // Remove recipes that were deleted from the list
+        while (iterRecipes.hasNext()) {
+            Recipe next = iterRecipes.next();
+            for (String n : toDelete) {
+                if (next.getName().equals(n)) {
+                    iterRecipes.remove();
+                }
+            }
         }
         // Used to refresh the Recipe list view to reflect deletions
         makeRecipeListMultipleSelection();

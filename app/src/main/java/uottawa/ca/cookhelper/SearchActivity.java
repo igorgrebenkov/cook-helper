@@ -1,9 +1,11 @@
 package uottawa.ca.cookhelper;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -97,6 +99,7 @@ public class SearchActivity extends AppCompatActivity {
         // Update ListView contents
         refreshSearchResultNames();
         refreshListView();
+        hideKeyboard();
     }
 
     /**
@@ -173,6 +176,17 @@ public class SearchActivity extends AppCompatActivity {
         searchResultNames = new ArrayList<>();
         for (Recipe r : sortedSearchResults) {
             searchResultNames.add(r.getName());
+        }
+    }
+
+    /**
+     * Hides the on-screen keyboard (if it's open).
+     */
+    private void hideKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 }
